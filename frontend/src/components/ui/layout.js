@@ -6,24 +6,27 @@
  */
 
 import * as React from 'react';
-// import { useStaticQuery, graphql } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 
 import Header from './header';
 
 const Layout = ({ children }) => {
-  // const data = useStaticQuery(graphql`
-  //   query SiteTitleQuery {
-  //     site {
-  //       siteMetadata {
-  //         title
-  //       }
-  //     }
-  //   }
-  // `);
+  const data = useStaticQuery(graphql`
+    query GetCategories {
+      allStrapiCategory {
+        edges {
+          node {
+            name
+            strapiId
+          }
+        }
+      }
+    }
+  `);
 
   return (
     <>
-      <Header />
+      <Header categories={data.allStrapiCategory.edges} />
       <div
         style={{
           margin: `0 auto`,
