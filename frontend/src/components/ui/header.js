@@ -92,7 +92,13 @@ export default function Header({ categories }) {
     >
       <List disablePadding>
         {routes.map(route => (
-          <ListItem divider button key={route.node.strapiId}>
+          <ListItem
+            divider
+            button
+            key={route.node.strapiId}
+            component={Link}
+            to={route.node.link || `/${route.node.name.toLowerCase()}`}
+          >
             <ListItemText
               primary={route.node.name}
               classes={{ primary: classes.listItemText }}
@@ -104,7 +110,12 @@ export default function Header({ categories }) {
   );
 
   const actions = [
-    { icon: search, alt: 'search', visible: true },
+    {
+      icon: search,
+      alt: 'search',
+      visible: true,
+      onClick: () => console.log('search'),
+    },
     { icon: cart, alt: 'cart', visible: true, link: '/cart' },
     { icon: account, alt: 'account', visible: !matchesMD, link: '/account' },
     {
@@ -127,12 +138,16 @@ export default function Header({ categories }) {
         {actions.map(action => {
           if (action.visible) {
             return (
-              <IconButton key={action.alt} component={Link} to={action.link}>
+              <IconButton
+                key={action.alt}
+                onClick={action.onClick}
+                component={action.onClick ? undefined : Link}
+                to={action.onClick ? undefined : action.link}
+              >
                 <img
                   className={classes.icon}
                   src={action.icon}
                   alt={action.alt}
-                  onClick={action.onClick}
                 />
               </IconButton>
             );
