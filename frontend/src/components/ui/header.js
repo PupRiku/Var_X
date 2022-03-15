@@ -12,6 +12,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link, navigate } from 'gatsby';
 
 import search from '../../images/search.svg';
 import cart from '../../images/cart.svg';
@@ -25,6 +26,15 @@ const useStyles = makeStyles(theme => ({
   logoText: {
     color: theme.palette.common.offBlack,
   },
+  logoContainer: {
+    [theme.breakpoints.down('md')]: {
+      marginRight: 'auto',
+    },
+  },
+  tab: {
+    ...theme.typography.body1,
+    fontWeight: 600,
+  },
   tabs: {
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -32,6 +42,12 @@ const useStyles = makeStyles(theme => ({
   icon: {
     height: '3rem',
     width: '3rem',
+  },
+  drawer: {
+    backgroundColor: theme.palette.primary.main,
+  },
+  listItemText: {
+    color: '#fff',
   },
 }));
 
@@ -45,7 +61,7 @@ export default function Header({ categories }) {
 
   const routes = [
     ...categories,
-    { node: { name: 'Contact Us', strapiId: 'contact' } },
+    { node: { name: 'Contact Us', strapiId: 'contact', link: 'contact' } },
   ];
 
   const tabs = (
@@ -54,7 +70,13 @@ export default function Header({ categories }) {
       classes={{ indicator: classes.coloredIndicator, root: classes.tabs }}
     >
       {routes.map(route => (
-        <Tab label={route.node.name} key={route.node.strapiId} />
+        <Tab
+          component={Link}
+          to={route.node.link || `/${route.node.name.toLowerCase()}`}
+          label={route.node.name}
+          key={route.node.strapiId}
+          classes={{ root: classes.tab }}
+        />
       ))}
     </Tabs>
   );
@@ -66,39 +88,56 @@ export default function Header({ categories }) {
       onClose={() => setDrawerOpen(false)}
       disableBackdropTransition={!iOS}
       disableDiscovery={iOS}
+      classes={{ paper: classes.drawer }}
     >
       <List disablePadding>
         {routes.map(route => (
           <ListItem divider button key={route.node.strapiId}>
-            <ListItemText primary={route.node.name} />
+            <ListItemText
+              primary={route.node.name}
+              classes={{ primary: classes.listItemText }}
+            />
           </ListItem>
         ))}
       </List>
     </SwipeableDrawer>
   );
 
+  const actions = [
+    { icon: search, alt: 'search', visible: true },
+    { icon: cart, alt: 'cart', visible: true, link: '/cart' },
+    { icon: account, alt: 'account', visible: !matchesMD, link: '/account' },
+    {
+      icon: menu,
+      alt: 'menu',
+      visible: matchesMD,
+      onClick: () => setDrawerOpen(true),
+    },
+  ];
+
   return (
     <AppBar color="transparent" elevation={0}>
       <Toolbar>
-        <Button>
+        <Button classes={{ root: classes.logoContainer }}>
           <Typography variant="h1">
             <span className={classes.logoText}>VAR</span> X
           </Typography>
         </Button>
         {matchesMD ? drawer : tabs}
-        <IconButton>
-          <img className={classes.icon} src={search} alt="search" />
-        </IconButton>
-        <IconButton>
-          <img className={classes.icon} src={cart} alt="cart" />
-        </IconButton>
-        <IconButton onClick={matchesMD ? () => setDrawerOpen(true) : null}>
-          <img
-            className={classes.icon}
-            src={matchesMD ? menu : account}
-            alt={matchesMD ? 'menu' : 'account'}
-          />
-        </IconButton>
+        {actions.map(action => {
+          if (action.visible) {
+            return (
+              <IconButton key={action.alt} component={Link} to={action.link}>
+                <img
+                  className={classes.icon}
+                  src={action.icon}
+                  alt={action.alt}
+                  onClick={action.onClick}
+                />
+              </IconButton>
+            );
+          }
+        })}
       </Toolbar>
     </AppBar>
   );
