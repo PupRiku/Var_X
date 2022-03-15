@@ -61,7 +61,7 @@ export default function Header({ categories }) {
 
   const routes = [
     ...categories,
-    { node: { name: 'Contact Us', strapiId: 'contact', link: 'contact' } },
+    { node: { name: 'Contact Us', strapiId: 'contact', link: '/contact' } },
   ];
 
   const tabs = (
@@ -129,7 +129,11 @@ export default function Header({ categories }) {
   return (
     <AppBar color="transparent" elevation={0}>
       <Toolbar>
-        <Button classes={{ root: classes.logoContainer }}>
+        <Button
+          component={Link}
+          to="/"
+          classes={{ root: classes.logoContainer }}
+        >
           <Typography variant="h1">
             <span className={classes.logoText}>VAR</span> X
           </Typography>
