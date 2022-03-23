@@ -12,7 +12,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link, navigate } from 'gatsby';
+import { Link } from 'gatsby';
 
 import search from '../../images/search.svg';
 import cart from '../../images/cart.svg';
