@@ -3,11 +3,16 @@ import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import { useStaticQuery, graphql } from 'gatsby';
 import { makeStyles } from '@material-ui/core/styles';
 
 import featuredAdornment from '../../images/featured-adornment.svg';
 import frame from '../../images/product-frame-grid.svg';
+import explore from '../../images/explore.svg';
+
+import Rating from './Rating';
 
 const useStyles = makeStyles(theme => ({
   background: {
@@ -42,6 +47,7 @@ const useStyles = makeStyles(theme => ({
     width: '24.5rem',
     zIndex: 0,
     transition: 'transform 0.5s ease',
+    padding: '1rem 2rem',
   },
   slideLeft: {
     transform: 'translate(-24.5rem, 0px)',
@@ -51,6 +57,22 @@ const useStyles = makeStyles(theme => ({
   },
   productContainer: {
     margin: '5rem 0',
+  },
+  exploreContainer: {
+    marginTop: 'auto',
+  },
+  exploreButton: {
+    textTransform: 'none',
+  },
+  exploreIcon: {
+    height: '1.5rem',
+    marginLeft: '1rem',
+  },
+  chipLabel: {
+    ...theme.typography.h5,
+  },
+  chipRoot: {
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -128,7 +150,30 @@ export default function FeaturedProducts() {
                     (alignment === 'flex-start' || alignment === 'center'),
                 }),
               }}
-            ></Grid>
+            >
+              <Grid item>
+                <Typography variant="h4">{node.name.split(' ')[0]}</Typography>
+              </Grid>
+              <Grid item>
+                <Rating number={5} />
+              </Grid>
+              <Grid item>
+                <Chip
+                  label={`$${node.variants[0].price}`}
+                  classes={{ root: classes.chipRoot, label: classes.chipLabel }}
+                />
+              </Grid>
+              <Grid item classes={{ root: classes.exploreContainer }}>
+                <Button classes={{ root: classes.exploreButton }}>
+                  <Typography variant="h5">Details</Typography>
+                  <img
+                    src={explore}
+                    alt="go to product details"
+                    className={classes.exploreIcon}
+                  />
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         );
       })}
