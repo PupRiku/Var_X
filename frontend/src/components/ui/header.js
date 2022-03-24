@@ -167,6 +167,8 @@ export default function Header({ categories }) {
                 />
               </IconButton>
             );
+          } else {
+            return null;
           }
         })}
       </Toolbar>
