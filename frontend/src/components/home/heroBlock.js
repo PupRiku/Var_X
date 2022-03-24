@@ -2,10 +2,24 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Lottie from 'react-lottie';
+import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import animationData from '../../images/data.json';
 
+const useStyles = makeStyles(theme => ({
+  textContainer: {
+    padding: '2rem',
+  },
+}));
+
 export default function HeroBlock() {
+  const classes = useStyles();
+
+  const matchesLG = useMediaQuery(theme => theme.breakpoints.down('lg'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -14,7 +28,7 @@ export default function HeroBlock() {
 
   return (
     <Grid container justifyContent="space-around" alignItems="center">
-      <Grid item>
+      <Grid item classes={{ root: classes.textContainer }}>
         <Grid container direction="column">
           <Grid item>
             <Typography align="center" variant="h1">
@@ -31,7 +45,18 @@ export default function HeroBlock() {
         </Grid>
       </Grid>
       <Grid item>
-        <Lottie options={defaultOptions} width="50rem" />
+        <Lottie
+          options={defaultOptions}
+          width={
+            matchesXS
+              ? '25rem'
+              : matchesMD
+              ? '30rem'
+              : matchesLG
+              ? '40rem'
+              : '50rem'
+          }
+        />
       </Grid>
     </Grid>
   );
