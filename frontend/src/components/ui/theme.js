@@ -25,7 +25,7 @@ const theme = createTheme({
   },
   typography: {
     h1: {
-      fontSize: '4.5rem', //72 (1rem = 16)
+      fontSize: '4.5rem', // ? 72 (1rem = 16)
       fontFamily: 'Philosopher',
       fontStyle: 'italic',
       fontWeight: 700,
@@ -33,13 +33,13 @@ const theme = createTheme({
     },
     h2: {
       fontFamily: 'Montserrat',
-      fontSize: '3rem', //48
+      fontSize: '3rem', // ? 48
       fontWeight: 500,
       color: '#fff',
     },
     h3: {
       fontFamily: 'Montserrat',
-      fontSize: '2rem', //32
+      fontSize: '2rem', // ? 32
       fontWeight: 300,
       color: green,
     },
@@ -47,19 +47,19 @@ const theme = createTheme({
       fontFamily: 'Philosopher',
       fontStyle: 'italic',
       fontWeight: 700,
-      fontSize: '3rem', //48
+      fontSize: '3rem', // ? 48
       color: '#fff',
     },
     h5: {
       fontFamily: 'Philosopher',
       fontStyle: 'italic',
-      fontSize: '2rem', //32
+      fontSize: '2rem', // ? 32
       fontWeight: 700,
       color: '#fff',
     },
     body1: {
       fontFamily: 'Montserrat',
-      fontSize: '1.5rem', //24
+      fontSize: '1.5rem', // ? 24
       color: grey,
     },
   },

@@ -9,7 +9,7 @@ import facebook from '../../images/facebook.svg';
 import twitter from '../../images/twitter.svg';
 import instagram from '../../images/instagram.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: theme.palette.primary.main,
     padding: '2rem',
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Links */}
         <Grid item classes={{ root: classes.linkContainer }}>
           <Grid container>
-            {Object.keys(routes).map(category => (
+            {Object.keys(routes).map((category) => (
               <Grid
                 item
                 key={category}
@@ -100,7 +100,7 @@ export default function Footer() {
                 <Grid item>
                   <Typography variant="h5">{category}</Typography>
                 </Grid>
-                {routes[category].map(route => (
+                {routes[category].map((route) => (
                   <Grid item key={route.label}>
                     <Typography
                       component={route.link ? Link : 'a'}
@@ -120,7 +120,7 @@ export default function Footer() {
         {/* Social Media Icons */}
         <Grid item>
           <Grid container direction="column" alignItems="center">
-            {socialMedia.map(platform => (
+            {socialMedia.map((platform) => (
               <Grid item key={platform.alt}>
                 <IconButton
                   component="a"

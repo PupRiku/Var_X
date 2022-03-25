@@ -8,7 +8,7 @@ import { Link } from 'gatsby';
 
 import cta from '../../images/cta.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   account: {
     color: '#fff',
     marginLeft: '2rem',
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 export default function CallToAction() {
   const classes = useStyles();
 
-  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   return (
     <Grid

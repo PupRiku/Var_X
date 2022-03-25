@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Header from './header';
 import Footer from './footer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   spacer: {
     marginBottom: '10rem',
     [theme.breakpoints.down('md')]: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Layout = ({ children }) => {
+function Layout({ children }) {
   const classes = useStyles();
 
   const data = useStaticQuery(graphql`
@@ -45,6 +45,6 @@ const Layout = ({ children }) => {
       <Footer />
     </>
   );
-};
+}
 
 export default Layout;

@@ -19,7 +19,7 @@ import cart from '../../images/cart.svg';
 import account from '../../images/account-header.svg';
 import menu from '../../images/menu.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   coloredIndicator: {
     backgroundColor: '#fff',
   },
@@ -62,34 +62,33 @@ const useStyles = makeStyles(theme => ({
 
 export default function Header({ categories }) {
   const classes = useStyles();
-  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-  const activeIndex = () => {
-    const found = routes.indexOf(
-      routes.filter(
-        ({ node: { name, link } }) =>
-          (link || `/${name.toLowerCase()}`) === window.location.pathname
-      )[0]
-    );
-
-    return found === -1 ? false : found;
-  };
 
   const routes = [
     ...categories,
     { node: { name: 'Contact Us', strapiId: 'contact', link: '/contact' } },
   ];
 
+  const activeIndex = () => {
+    const found = routes.indexOf(
+      routes.filter(
+        ({ node: { name, link } }) => (link || `/${name.toLowerCase()}`) === window.location.pathname,
+      )[0],
+    );
+
+    return found === -1 ? false : found;
+  };
+
   const tabs = (
     <Tabs
       value={activeIndex()}
       classes={{ indicator: classes.coloredIndicator, root: classes.tabs }}
     >
-      {routes.map(route => (
+      {routes.map((route) => (
         <Tab
           component={Link}
           to={route.node.link || `/${route.node.name.toLowerCase()}`}
@@ -135,10 +134,15 @@ export default function Header({ categories }) {
       icon: search,
       alt: 'search',
       visible: true,
+      // eslint-disable-next-line no-console
       onClick: () => console.log('search'),
     },
-    { icon: cart, alt: 'cart', visible: true, link: '/cart' },
-    { icon: account, alt: 'account', visible: !matchesMD, link: '/account' },
+    {
+      icon: cart, alt: 'cart', visible: true, link: '/cart',
+    },
+    {
+      icon: account, alt: 'account', visible: !matchesMD, link: '/account',
+    },
     {
       icon: menu,
       alt: 'menu',
@@ -156,11 +160,13 @@ export default function Header({ categories }) {
           classes={{ root: classes.logoContainer }}
         >
           <Typography variant="h1" classes={{ root: classes.logo }}>
-            <span className={classes.logoText}>VAR</span> X
+            <span className={classes.logoText}>VAR</span>
+            {' '}
+            X
           </Typography>
         </Button>
         {matchesMD ? drawer : tabs}
-        {actions.map(action => {
+        {actions.map((action) => {
           if (action.visible) {
             return (
               <IconButton
@@ -176,9 +182,8 @@ export default function Header({ categories }) {
                 />
               </IconButton>
             );
-          } else {
-            return null;
           }
+          return null;
         })}
       </Toolbar>
     </AppBar>

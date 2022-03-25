@@ -9,7 +9,7 @@ import marketingAdornment from '../../images/marketing-adornment.svg';
 import moreByUs from '../../images/more-by-us.svg';
 import store from '../../images/store.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   button: {
     backgroundImage: `url(${marketingAdornment})`,
     backgroundSize: 'cover',
@@ -77,7 +77,7 @@ export default function MarketingButtons() {
       justifyContent="space-around"
       classes={{ root: classes.container }}
     >
-      {buttons.map(button => (
+      {buttons.map((button) => (
         <Grid item key={button.label}>
           <Grid
             container

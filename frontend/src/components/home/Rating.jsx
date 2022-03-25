@@ -1,20 +1,20 @@
-import React from "react"
-import { makeStyles } from "@material-ui/core/styles"
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-import fullStar from "../../images/full-star.svg"
-import halfStar from "../../images/half-star.svg"
-import emptyStar from "../../images/empty-star.svg"
+import fullStar from '../../images/full-star.svg';
+import halfStar from '../../images/half-star.svg';
+import emptyStar from '../../images/empty-star.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   size: {
     height: ({ size }) => `${size || 2}rem`,
     width: ({ size }) => `${size || 2}rem`,
   },
-}))
+}));
 
 export default function Rating({ number, size }) {
-  const diff = 5 - Math.ceil(number)
-  const classes = useStyles({ size })
+  const diff = 5 - Math.ceil(number);
+  const classes = useStyles({ size });
 
   return (
     <>
@@ -33,5 +33,5 @@ export default function Rating({ number, size }) {
         />
       ))}
     </>
-  )
+  );
 }

@@ -15,7 +15,7 @@ import explore from '../../images/explore.svg';
 
 import Rating from './Rating';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   background: {
     backgroundImage: `url(${featuredAdornment})`,
     backgroundPosition: 'top',
@@ -99,7 +99,7 @@ export default function FeaturedProducts() {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(null);
 
-  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const data = useStaticQuery(graphql`
     query GetFeatured {
@@ -120,6 +120,7 @@ export default function FeaturedProducts() {
     }
   `);
 
+  // eslint-disable-next-line no-console
   console.log(data);
 
   return (
@@ -133,10 +134,10 @@ export default function FeaturedProducts() {
         const alignment = matchesMD
           ? 'center'
           : i === 0 || i === 3
-          ? 'flex-start'
-          : i === 1 || i === 4
-          ? 'center'
-          : 'flex-end';
+            ? 'flex-start'
+            : i === 1 || i === 4
+              ? 'center'
+              : 'flex-end';
         return (
           <Grid
             item
@@ -147,9 +148,7 @@ export default function FeaturedProducts() {
             alignItems="center"
           >
             <IconButton
-              onClick={() =>
-                expanded === i ? setExpanded(null) : setExpanded(i)
-              }
+              onClick={() => (expanded === i ? setExpanded(null) : setExpanded(i))}
               classes={{ root: classes.frame }}
             >
               <img
@@ -168,9 +167,9 @@ export default function FeaturedProducts() {
                   [classes.slideLeft]:
                     !matchesMD && expanded === i && alignment === 'flex-end',
                   [classes.slideRight]:
-                    !matchesMD &&
-                    expanded === i &&
-                    (alignment === 'flex-start' || alignment === 'center'),
+                    !matchesMD
+                    && expanded === i
+                    && (alignment === 'flex-start' || alignment === 'center'),
                   [classes.slideDown]: matchesMD && expanded === i,
                 }),
               }}
