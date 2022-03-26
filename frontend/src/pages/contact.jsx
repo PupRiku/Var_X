@@ -78,6 +78,28 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: '30rem',
   },
+  input: {
+    color: '#fff',
+  },
+  fieldContainer: {
+    marginBottom: '1rem',
+  },
+  multilineContainer: {
+    marginTop: '1rem',
+  },
+  '@global': {
+    '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before': {
+      borderBottom: '2px solid #fff',
+    },
+    '.MuiInput-underline:after': {
+      borderBottom: `2px solid ${theme.palette.secondary.main}`,
+    },
+    '.MuiInput-multiline': {
+      border: '2px solid #fff',
+      borderRadius: 10,
+      padding: '1rem',
+    },
+  },
 }));
 
 function ContactPage() {
@@ -115,31 +137,34 @@ function ContactPage() {
             </Grid>
             <Grid item>
               <Grid container direction="column">
-                <Grid item>
+                <Grid item classes={{ root: classes.fieldContainer }}>
                   <TextField
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Name"
                     classes={{ root: classes.textField }}
+                    InputProps={{ classes: { input: classes.input } }}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item classes={{ root: classes.fieldContainer }}>
                   <TextField
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                     classes={{ root: classes.textField }}
+                    InputProps={{ classes: { input: classes.input } }}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item classes={{ root: classes.fieldContainer }}>
                   <TextField
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="Phone Number"
                     classes={{ root: classes.textField }}
+                    InputProps={{ classes: { input: classes.input } }}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item classes={{ root: classes.multilineContainer }}>
                   <TextField
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -147,6 +172,7 @@ function ContactPage() {
                     multiline
                     rows={8}
                     classes={{ root: classes.textField }}
+                    InputProps={{ disableUnderline: true, classes: { input: classes.input } }}
                   />
                 </Grid>
               </Grid>
