@@ -13,7 +13,8 @@ import sort from '../../images/sort.svg';
 const useStyles = makeStyles((theme) => ({
   functionContainer: {
     backgroundColor: theme.palette.primary.main,
-    height: '6rem',
+    minHeight: '6rem',
+    height: 'auto',
     borderRadius: '10px 10px 0px 0px',
   },
 }));
@@ -24,8 +25,15 @@ export default function FunctionContainer({ filterOptions }) {
 
   const content = () => {
     switch (option) {
-      case null: {
-        const items = [{ icon: filter, alt: 'filter' }, { icon: sort, alt: 'sort' }];
+      case 'sort':
+        return <Sort setOption={setOption} />;
+      case 'filter':
+        return <Filter setOption={setOption} filterOptions={filterOptions} />;
+      default: {
+        const items = [
+          { icon: filter, alt: 'filter' },
+          { icon: sort, alt: 'sort' },
+        ];
         return (
           <Grid item container justifyContent="space-around" alignItems="center">
             {items.map((item) => (
@@ -36,13 +44,8 @@ export default function FunctionContainer({ filterOptions }) {
               </Grid>
             ))}
           </Grid>
-        ); }
-      case 'sort':
-        return <Sort setOption={setOption} />;
-      case 'filter':
-        return <Filter setOption={setOption} filterOptions={filterOptions} />;
-      default:
-        return null;
+        );
+      }
     }
   };
 
