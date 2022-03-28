@@ -1,13 +1,15 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Rating from '../home/Rating';
+import Sizes from './Sizes';
 
 import frame from '../../images/selected-frame.svg';
 import explore from '../../images/explore.svg';
@@ -54,10 +56,28 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     padding: '0.5rem 1rem',
   },
+  chipRoot: {
+    transform: 'scale(1.5)',
+  },
+  chipContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 }));
 
-export default function QuickView({ open, setOpen, url, name }) {
+export default function QuickView({
+  open,
+  setOpen,
+  url,
+  name,
+  price,
+  product,
+}) {
   const classes = useStyles();
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  var sizes = [];
+  product.node.variants.map((variant) => sizes.push(variant.size));
 
   return (
     <Dialog
@@ -69,7 +89,12 @@ export default function QuickView({ open, setOpen, url, name }) {
         <Grid container direction='column' alignItems='center'>
           <img src={url} alt='product image' classes={classes.productImage} />
         </Grid>
-        <Grid item container classes={{ root: classes.toolbar }}>
+        <Grid
+          item
+          container
+          justifyContent='space-between'
+          classes={{ root: classes.toolbar }}
+        >
           <Grid item>
             <Grid
               container
@@ -95,6 +120,20 @@ export default function QuickView({ open, setOpen, url, name }) {
                     className={classes.exploreIcon}
                   />
                 </Button>
+              </Grid>
+            </Grid>
+            <Grid item classes={{ root: classes.chipContainer }}>
+              <Chip label={`$${price}`} classes={{ root: classes.chipRoot }} />
+            </Grid>
+            <Grid item>
+              <Grid container direction='column'>
+                <Grid item>
+                  <Sizes
+                    sizes={sizes}
+                    selectedSize={selectedSize}
+                    setSelectedSize={setSelectedSize}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
