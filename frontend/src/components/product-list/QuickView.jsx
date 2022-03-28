@@ -87,39 +87,48 @@ export default function QuickView({
     >
       <DialogContent classes={{ root: classes.selectedFrame }}>
         <Grid container direction='column' alignItems='center'>
-          <img src={url} alt='product image' classes={classes.productImage} />
-        </Grid>
-        <Grid
-          item
-          container
-          justifyContent='space-between'
-          classes={{ root: classes.toolbar }}
-        >
           <Grid item>
-            <Grid
-              container
-              direction='column'
-              justifyContent='space-between'
-              classes={{ root: classes.infoContainer }}
-            >
-              <Grid item>
-                <Typography variant='h4'>{name}</Typography>
-                <Rating number={4} />
-              </Grid>
-              <Grid item>
-                <Typography variant='h3' classes={{ root: classes.stock }}>
-                  12 Currently In Stock
-                </Typography>
-                <Button classes={{ root: classes.detailButton }}>
-                  <Typography variant='h3' classes={{ root: classes.details }}>
-                    Details
+            <img
+              src={url}
+              alt='product image'
+              className={classes.productImage}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            justifyContent='space-between'
+            classes={{ root: classes.toolbar }}
+          >
+            <Grid item>
+              <Grid
+                container
+                direction='column'
+                justifyContent='space-between'
+                classes={{ root: classes.infoContainer }}
+              >
+                <Grid item>
+                  <Typography variant='h4'>{name}</Typography>
+                  <Rating number={4} />
+                </Grid>
+                <Grid item>
+                  <Typography variant='h3' classes={{ root: classes.stock }}>
+                    12 Currently In Stock
                   </Typography>
-                  <img
-                    src={explore}
-                    alt='go to product details page'
-                    className={classes.exploreIcon}
-                  />
-                </Button>
+                  <Button classes={{ root: classes.detailButton }}>
+                    <Typography
+                      variant='h3'
+                      classes={{ root: classes.details }}
+                    >
+                      Details
+                    </Typography>
+                    <img
+                      src={explore}
+                      className={classes.exploreIcon}
+                      alt='go to product detail page'
+                    />
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item classes={{ root: classes.chipContainer }}>
