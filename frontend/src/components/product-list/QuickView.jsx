@@ -82,8 +82,6 @@ export default function QuickView({
   var sizes = [];
   var colors = [];
 
-  console.log(sizes);
-
   product.node.variants.map((variant) => {
     sizes.push(variant.size);
     colors.push(variant.color);
