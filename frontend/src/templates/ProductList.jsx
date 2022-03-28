@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { graphql } from 'gatsby';
 
@@ -13,6 +13,8 @@ export default function ProductList({
     allStrapiProduct: { edges: products },
   },
 }) {
+  const [layout, setLayout] = useState('grid');
+
   return (
     <Layout>
       <Grid container direction='column' alignItems='center'>
@@ -20,8 +22,10 @@ export default function ProductList({
           filterOptions={filterOptions}
           name={name}
           description={description}
+          layout={layout}
+          setLayout={setLayout}
         />
-        <ListOfProducts products={products} />
+        <ListOfProducts layout={layout} products={products} />
       </Grid>
     </Layout>
   );

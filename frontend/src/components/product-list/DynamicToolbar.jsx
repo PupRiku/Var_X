@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -16,7 +17,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DynamicToolbar({ filterOptions, name, description }) {
+export default function DynamicToolbar({
+  filterOptions,
+  name,
+  description,
+  layout,
+  setLayout,
+}) {
   const classes = useStyles();
   const [option, setOption] = useState(null);
 
@@ -28,7 +35,12 @@ export default function DynamicToolbar({ filterOptions, name, description }) {
         filterOptions={filterOptions}
       />
       {option === null && (
-        <DescriptionContainer name={name} description={description} />
+        <DescriptionContainer
+          layout={layout}
+          setLayout={setLayout}
+          name={name}
+          description={description}
+        />
       )}
     </Grid>
   );
