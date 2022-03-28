@@ -19,15 +19,15 @@ export default function Rating({ number, size }) {
   return (
     <>
       {[...Array(Math.floor(number))].map((e, i) => (
-        <img src={fullStar} alt="full star" key={i} className={classes.size} />
+        <img src={fullStar} alt='full star' key={i} className={classes.size} />
       ))}
       {number % 1 !== 0 ? (
-        <img src={halfStar} alt="half star" className={classes.size} />
+        <img src={halfStar} alt='half star' className={classes.size} />
       ) : null}
       {[...Array(diff)].map((e, i) => (
         <img
           src={emptyStar}
-          alt="empty star"
+          alt='empty star'
           key={`${i}-empty`}
           className={classes.size}
         />

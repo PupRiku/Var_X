@@ -52,25 +52,25 @@ export default function CallToAction() {
   return (
     <Grid
       container
-      justifyContent="space-around"
-      alignItems="center"
+      justifyContent='space-around'
+      alignItems='center'
       classes={{ root: classes.container }}
       direction={matchesMD ? 'column' : 'row'}
     >
       <Grid item>
-        <img src={cta} className={classes.icon} alt="quality committed" />
+        <img src={cta} className={classes.icon} alt='quality committed' />
       </Grid>
       <Grid item>
-        <Grid container direction="column">
+        <Grid container direction='column'>
           <Grid item classes={{ root: classes.headingContainer }}>
-            <Typography align={matchesMD ? 'center' : undefined} variant="h1">
+            <Typography align={matchesMD ? 'center' : undefined} variant='h1'>
               Committed To Quality
             </Typography>
           </Grid>
           <Grid item classes={{ root: classes.body }}>
             <Typography
               align={matchesMD ? 'center' : undefined}
-              variant="body1"
+              variant='body1'
             >
               At VAR X our mission is to provide comfortable, durable, premium,
               designer clothing and clothing accessories to developers and
@@ -86,17 +86,17 @@ export default function CallToAction() {
             <Grid item>
               <Button
                 component={Link}
-                to="/contact"
-                variant="outlined"
-                color="primary"
+                to='/contact'
+                variant='outlined'
+                color='primary'
               >
                 Contact Us
               </Button>
               <Button
                 component={Link}
-                to="/account"
-                variant="contained"
-                color="primary"
+                to='/account'
+                variant='contained'
+                color='primary'
                 classes={{ root: classes.account }}
               >
                 Create Account

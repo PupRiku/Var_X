@@ -15,12 +15,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     minHeight: '6rem',
     height: 'auto',
-    borderRadius: ({ option }) => option !== null ? "10px" : '10px 10px 0px 0px',
+    borderRadius: ({ option }) =>
+      option !== null ? '10px' : '10px 10px 0px 0px',
   },
 }));
 
-export default function FunctionContainer({ filterOptions, option, setOption }) {
-  const classes = useStyles({option});
+export default function FunctionContainer({
+  filterOptions,
+  option,
+  setOption,
+}) {
+  const classes = useStyles({ option });
 
   const content = () => {
     switch (option) {
@@ -34,7 +39,12 @@ export default function FunctionContainer({ filterOptions, option, setOption }) 
           { icon: sort, alt: 'sort' },
         ];
         return (
-          <Grid item container justifyContent="space-around" alignItems="center">
+          <Grid
+            item
+            container
+            justifyContent='space-around'
+            alignItems='center'
+          >
             {items.map((item) => (
               <Grid item key={item.alt}>
                 <IconButton onClick={() => setOption(item.alt)}>

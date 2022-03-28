@@ -59,12 +59,21 @@ export default function DescriptionContainer({ name, description }) {
   const [layout, setLayout] = useState('grid');
 
   return (
-    <Grid item container classes={{ root: classes.mainContainer }} justifyContent="center">
+    <Grid
+      item
+      container
+      classes={{ root: classes.mainContainer }}
+      justifyContent='center'
+    >
       <Grid item classes={{ root: classes.descriptionContainer }}>
-        <Typography align="center" variant="h4" paragraph gutterBottom>
+        <Typography align='center' variant='h4' paragraph gutterBottom>
           {name}
         </Typography>
-        <Typography align="center" variant="body1" classes={{ root: classes.description }}>
+        <Typography
+          align='center'
+          variant='body1'
+          classes={{ root: classes.description }}
+        >
           {description}
         </Typography>
       </Grid>

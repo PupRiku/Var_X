@@ -33,14 +33,14 @@ export default function Sort({ setOption }) {
   ];
 
   return (
-    <Grid item container justifyContent="space-between" alignItems="center">
+    <Grid item container justifyContent='space-between' alignItems='center'>
       <Grid item>
         <IconButton onClick={() => setOption(null)}>
-          <img src={sort} alt="sort" />
+          <img src={sort} alt='sort' />
         </IconButton>
       </Grid>
       <Grid item xs>
-        <Grid container justifyContent="space-around">
+        <Grid container justifyContent='space-around'>
           {sortOptions.map((option) => (
             <Grid item key={option.label}>
               <Chip
@@ -53,7 +53,7 @@ export default function Sort({ setOption }) {
       </Grid>
       <Grid item>
         <IconButton onClick={() => setOption(null)}>
-          <img src={close} alt="close" />
+          <img src={close} alt='close' />
         </IconButton>
       </Grid>
     </Grid>

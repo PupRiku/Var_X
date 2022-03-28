@@ -74,16 +74,16 @@ export default function MarketingButtons() {
   return (
     <Grid
       container
-      justifyContent="space-around"
+      justifyContent='space-around'
       classes={{ root: classes.container }}
     >
       {buttons.map((button) => (
         <Grid item key={button.label}>
           <Grid
             container
-            alignItems="center"
-            justifyContent="center"
-            direction="column"
+            alignItems='center'
+            justifyContent='center'
+            direction='column'
             classes={{ root: classes.button }}
             component={button.link ? Link : 'a'}
             to={button.link ? button.link : undefined}
@@ -97,7 +97,7 @@ export default function MarketingButtons() {
               />
             </Grid>
             <Grid item>
-              <Typography classes={{ root: classes.label }} variant="h1">
+              <Typography classes={{ root: classes.label }} variant='h1'>
                 {button.label}
               </Typography>
             </Grid>

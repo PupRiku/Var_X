@@ -2,42 +2,44 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
   const results = await graphql(
-    `{
-      products: allStrapiProduct {
-        edges {
-          node {
-            name
-            strapiId
-            category {
+    `
+      {
+        products: allStrapiProduct {
+          edges {
+            node {
               name
-            }
-          }
-        }
-      }
-      categories: allStrapiCategory {
-        edges {
-          node {
-            strapiId
-            name
-            description
-            filterOptions {
-              Size {
-                checked
-                label
-              }
-              Style {
-                checked
-                label
-              }
-              Color {
-                checked
-                label
+              strapiId
+              category {
+                name
               }
             }
           }
         }
+        categories: allStrapiCategory {
+          edges {
+            node {
+              strapiId
+              name
+              description
+              filterOptions {
+                Size {
+                  checked
+                  label
+                }
+                Style {
+                  checked
+                  label
+                }
+                Color {
+                  checked
+                  label
+                }
+              }
+            }
+          }
+        }
       }
-    }`,
+    `
   );
 
   if (results.errors) {
@@ -49,7 +51,9 @@ exports.createPages = async ({ graphql, actions }) => {
 
   products.forEach((product) => {
     createPage({
-      path: `/${product.node.category.name.toLowerCase()}/${product.node.name.split(' ')[0]}`,
+      path: `/${product.node.category.name.toLowerCase()}/${
+        product.node.name.split(' ')[0]
+      }`,
       component: require.resolve('./src/templates/ProductDetail.jsx'),
       context: {
         name: product.node.name,

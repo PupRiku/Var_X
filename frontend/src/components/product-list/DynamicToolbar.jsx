@@ -21,9 +21,15 @@ export default function DynamicToolbar({ filterOptions, name, description }) {
   const [option, setOption] = useState(null);
 
   return (
-    <Grid item container direction="column" classes={{ root: classes.toolbar }}>
-      <FunctionContainer option={option} setOption={setOption} filterOptions={filterOptions} />
-      {option === null && <DescriptionContainer name={name} description={description} />}
+    <Grid item container direction='column' classes={{ root: classes.toolbar }}>
+      <FunctionContainer
+        option={option}
+        setOption={setOption}
+        filterOptions={filterOptions}
+      />
+      {option === null && (
+        <DescriptionContainer name={name} description={description} />
+      )}
     </Grid>
   );
 }

@@ -106,46 +106,48 @@ export default function PromotionalProducts() {
 
   const slides = [];
 
-  data.allStrapiProduct.edges.map(({ node }, i) => slides.push({
-    key: i,
-    content: (
-      <Grid container direction="column" alignItems="center">
-        <Grid item>
-          <IconButton
-            disableRipple
-            onClick={() => setSelectedSlide(i)}
-            classes={{
-              root: clsx(classes.iconButton, {
-                [classes.space]: selectedSlide !== i,
-              }),
-            }}
-          >
-            <img
-              src={
+  data.allStrapiProduct.edges.map(({ node }, i) =>
+    slides.push({
+      key: i,
+      content: (
+        <Grid container direction='column' alignItems='center'>
+          <Grid item>
+            <IconButton
+              disableRipple
+              onClick={() => setSelectedSlide(i)}
+              classes={{
+                root: clsx(classes.iconButton, {
+                  [classes.space]: selectedSlide !== i,
+                }),
+              }}
+            >
+              <img
+                src={
                   process.env.GATSBY_STRAPI_URL + node.variants[0].images[0].url
                 }
-              alt={`product-${i}`}
-              className={classes.carouselImage}
-            />
-          </IconButton>
+                alt={`product-${i}`}
+                className={classes.carouselImage}
+              />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            {selectedSlide === i ? (
+              <Typography variant='h1' classes={{ root: classes.productName }}>
+                {node.name.split(' ')[0]}
+              </Typography>
+            ) : null}
+          </Grid>
         </Grid>
-        <Grid item>
-          {selectedSlide === i ? (
-            <Typography variant="h1" classes={{ root: classes.productName }}>
-              {node.name.split(' ')[0]}
-            </Typography>
-          ) : null}
-        </Grid>
-      </Grid>
-    ),
-    description: node.description,
-  }));
+      ),
+      description: node.description,
+    })
+  );
 
   return (
     <Grid
       container
       justifyContent={matchesMD ? 'space-around' : 'space-between'}
-      alignItems="center"
+      alignItems='center'
       classes={{ root: classes.mainContainer }}
       direction={matchesMD ? 'column' : 'row'}
     >
@@ -153,14 +155,14 @@ export default function PromotionalProducts() {
         <Carousel slides={slides} goToSlide={selectedSlide} />
       </Grid>
       <Grid item classes={{ root: classes.descriptionContainer }}>
-        <Typography variant="h2" paragraph>
+        <Typography variant='h2' paragraph>
           {slides[selectedSlide].description}
         </Typography>
         <Button>
-          <Typography variant="h4" classes={{ root: classes.explore }}>
+          <Typography variant='h4' classes={{ root: classes.explore }}>
             Explore
           </Typography>
-          <img src={explore} alt="go to product page" />
+          <img src={explore} alt='go to product page' />
         </Button>
       </Grid>
     </Grid>

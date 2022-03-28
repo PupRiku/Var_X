@@ -35,18 +35,22 @@ export default function HeroBlock() {
   };
 
   return (
-    <Grid container justifyContent="space-around" alignItems="center">
+    <Grid container justifyContent='space-around' alignItems='center'>
       <Grid item classes={{ root: classes.textContainer }}>
-        <Grid container direction="column">
+        <Grid container direction='column'>
           <Grid item>
-            <Typography align="center" variant="h1" classes={{ root: classes.heading }}>
+            <Typography
+              align='center'
+              variant='h1'
+              classes={{ root: classes.heading }}
+            >
               The Premier
               <br />
               Developer Clothing Line
             </Typography>
           </Grid>
           <Grid item>
-            <Typography align="center" variant="h3">
+            <Typography align='center' variant='h3'>
               high-quality, custom-designed shirts, hats, and hoodies
             </Typography>
           </Grid>
@@ -59,10 +63,10 @@ export default function HeroBlock() {
             matchesXS
               ? '20rem'
               : matchesMD
-                ? '30rem'
-                : matchesLG
-                  ? '40rem'
-                  : '50rem'
+              ? '30rem'
+              : matchesLG
+              ? '40rem'
+              : '50rem'
           }
         />
       </Grid>

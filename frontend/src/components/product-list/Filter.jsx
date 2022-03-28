@@ -33,22 +33,32 @@ export default function Filter({ setOption, filterOptions }) {
   const classes = useStyles();
 
   return (
-    <Grid item container justifyContent="space-between" alignItems="center" classes={{ root: classes.mainContainer }}>
+    <Grid
+      item
+      container
+      justifyContent='space-between'
+      alignItems='center'
+      classes={{ root: classes.mainContainer }}
+    >
       <Grid item>
         <IconButton onClick={() => setOption(null)}>
-          <img src={filter} alt="filter" />
+          <img src={filter} alt='filter' />
         </IconButton>
       </Grid>
       <Grid item xs>
-        <Grid container justifyContent="space-around">
-          {Object.keys(filterOptions).filter((option) => filterOptions[option] !== null)
+        <Grid container justifyContent='space-around'>
+          {Object.keys(filterOptions)
+            .filter((option) => filterOptions[option] !== null)
             .map((option) => (
               <Grid item key={option}>
-                <Grid container direction="column">
+                <Grid container direction='column'>
                   <Grid item>
                     <Chip
                       label={option}
-                      classes={{ root: classes.chipRoot, label: classes.chipLabel }}
+                      classes={{
+                        root: classes.chipRoot,
+                        label: classes.chipLabel,
+                      }}
                     />
                   </Grid>
                   <Grid item>
@@ -59,13 +69,13 @@ export default function Filter({ setOption, filterOptions }) {
                             classes={{ label: classes.checkbox }}
                             key={label}
                             label={label}
-                            control={(
+                            control={
                               <Checkbox
                                 classes={{ root: classes.checkbox }}
                                 checked={checked}
                                 name={label}
                               />
-                            )}
+                            }
                           />
                         ))}
                       </FormGroup>
@@ -78,7 +88,7 @@ export default function Filter({ setOption, filterOptions }) {
       </Grid>
       <Grid item>
         <IconButton onClick={() => setOption(null)}>
-          <img src={close} alt="close" />
+          <img src={close} alt='close' />
         </IconButton>
       </Grid>
     </Grid>

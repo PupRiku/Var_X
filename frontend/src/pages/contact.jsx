@@ -7,7 +7,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-// todo import { Link } from 'gatsby';
+import { Link } from 'gatsby';
 
 import address from '../images/address.svg';
 import Email from '../images/EmailAdornment';
@@ -144,9 +144,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   '@global': {
-    '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before': {
-      borderBottom: '2px solid #fff',
-    },
+    '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
+      {
+        borderBottom: '2px solid #fff',
+      },
     '.MuiInput-underline:after': {
       borderBottom: `2px solid ${theme.palette.secondary.main}`,
     },
@@ -161,7 +162,10 @@ function ContactPage() {
   const matchesXS = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
   const [values, setValues] = useState({
-    name: '', email: '', phone: '', message: '',
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -169,7 +173,7 @@ function ContactPage() {
     name: {
       helperText: 'You must enter a name.',
       placeholder: 'Name',
-      adornment: <img src={nameAdornment} alt="name" />,
+      adornment: <img src={nameAdornment} alt='name' />,
     },
     email: {
       helperText: 'Invalid email.',
@@ -199,44 +203,44 @@ function ContactPage() {
     },
   };
 
-  const info = [{
-    label: (
-      <span>
-        1234 S Example St
-        {' '}
-        {matchesXS ? <br /> : null }
-        Wichita, KS 67111
-      </span>
-    ),
-    icon: <img src={address} alt="address" className={classes.contactIcon} />,
-  },
-  {
-    label: '(555) 555-5555',
-    icon: (
-      <div className={classes.contactIcon}>
-        <PhoneAdornment />
-      </div>
-    ),
-  },
-  {
-    label: 'chris@var-x.com',
-    icon: (
-      <div className={classes.contactEmailIcon}>
-        <Email color="#fff" />
-      </div>
-    ),
-  },
+  const info = [
+    {
+      label: (
+        <span>
+          1234 S Example St {matchesXS ? <br /> : null}
+          Wichita, KS 67111
+        </span>
+      ),
+      icon: <img src={address} alt='address' className={classes.contactIcon} />,
+    },
+    {
+      label: '(555) 555-5555',
+      icon: (
+        <div className={classes.contactIcon}>
+          <PhoneAdornment />
+        </div>
+      ),
+    },
+    {
+      label: 'chris@var-x.com',
+      icon: (
+        <div className={classes.contactEmailIcon}>
+          <Email color='#fff' />
+        </div>
+      ),
+    },
   ];
 
-  const disabled = Object.keys(errors).some((error) => errors[error] === true)
-  || Object.keys(errors).length !== 4;
+  const disabled =
+    Object.keys(errors).some((error) => errors[error] === true) ||
+    Object.keys(errors).length !== 4;
 
   return (
     <Layout>
       <Grid
         container
-        justifyContent="space-around"
-        alignItems="center"
+        justifyContent='space-around'
+        alignItems='center'
         classes={{ root: classes.mainContainer }}
         direction={matchesMD ? 'column' : 'row'}
       >
@@ -245,9 +249,9 @@ function ContactPage() {
           <Grid
             container
             classes={{ root: classes.formContainer }}
-            direction="column"
-            justifyContent="space-between"
-            alignItems="center"
+            direction='column'
+            justifyContent='space-between'
+            alignItems='center'
           >
             <Grid
               item
@@ -255,10 +259,10 @@ function ContactPage() {
                 root: clsx(classes.titleContainer, classes.blockContainer),
               }}
             >
-              <Typography variant="h4">Contact Us</Typography>
+              <Typography variant='h4'>Contact Us</Typography>
             </Grid>
             <Grid item>
-              <Grid container direction="column">
+              <Grid container direction='column'>
                 {Object.keys(fields).map((field) => {
                   const validateHelper = (event) => {
                     const valid = validate({ [field]: event.target.value });
@@ -266,7 +270,16 @@ function ContactPage() {
                   };
 
                   return (
-                    <Grid item key={field} classes={{ root: field === 'message' ? classes.multilineContainer : classes.fieldContainer }}>
+                    <Grid
+                      item
+                      key={field}
+                      classes={{
+                        root:
+                          field === 'message'
+                            ? classes.multilineContainer
+                            : classes.fieldContainer,
+                      }}
+                    >
                       <TextField
                         value={values[field]}
                         onChange={(e) => {
@@ -288,9 +301,9 @@ function ContactPage() {
                             ...fields[field].inputClasses,
                           },
                           disableUnderline: field === 'message',
-                          startAdornment: field === 'message' ? undefined
-                            : (
-                              <InputAdornment position="start">
+                          startAdornment:
+                            field === 'message' ? undefined : (
+                              <InputAdornment position='start'>
                                 {fields[field].adornment}
                               </InputAdornment>
                             ),
@@ -311,12 +324,10 @@ function ContactPage() {
                 }),
               }}
             >
-              <Typography variant="h4" classes={{ root: classes.sendMessage }}>send message</Typography>
-              <img
-                className={classes.sendIcon}
-                src={send}
-                alt="send message"
-              />
+              <Typography variant='h4' classes={{ root: classes.sendMessage }}>
+                send message
+              </Typography>
+              <img className={classes.sendIcon} src={send} alt='send message' />
             </Grid>
           </Grid>
         </Grid>
@@ -325,17 +336,26 @@ function ContactPage() {
         <Grid item>
           <Grid
             container
-            direction="column"
-            justifyContent="space-between"
+            direction='column'
+            justifyContent='space-between'
             classes={{ root: classes.infoContainer }}
           >
             {info.map((section, i) => (
-              <Grid item container key={section.label} alignItems="center" classes={{ root: i === 1 ? classes.middleInfo : undefined }}>
+              <Grid
+                item
+                container
+                key={section.label}
+                alignItems='center'
+                classes={{ root: i === 1 ? classes.middleInfo : undefined }}
+              >
                 <Grid item classes={{ root: classes.iconContainer }}>
                   {section.icon}
                 </Grid>
                 <Grid item>
-                  <Typography variant="h2" classes={{ root: classes.contactInfo }}>
+                  <Typography
+                    variant='h2'
+                    classes={{ root: classes.contactInfo }}
+                  >
                     {section.label}
                   </Typography>
                 </Grid>

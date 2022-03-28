@@ -76,8 +76,9 @@ export default function Header({ categories }) {
   const activeIndex = () => {
     const found = routes.indexOf(
       routes.filter(
-        ({ node: { name, link } }) => (link || `/${name.toLowerCase()}`) === window.location.pathname,
-      )[0],
+        ({ node: { name, link } }) =>
+          (link || `/${name.toLowerCase()}`) === window.location.pathname
+      )[0]
     );
 
     return found === -1 ? false : found;
@@ -138,10 +139,16 @@ export default function Header({ categories }) {
       onClick: () => console.log('search'),
     },
     {
-      icon: cart, alt: 'cart', visible: true, link: '/cart',
+      icon: cart,
+      alt: 'cart',
+      visible: true,
+      link: '/cart',
     },
     {
-      icon: account, alt: 'account', visible: !matchesMD, link: '/account',
+      icon: account,
+      alt: 'account',
+      visible: !matchesMD,
+      link: '/account',
     },
     {
       icon: menu,
@@ -152,17 +159,15 @@ export default function Header({ categories }) {
   ];
 
   return (
-    <AppBar color="transparent" elevation={0} position="static">
+    <AppBar color='transparent' elevation={0} position='static'>
       <Toolbar disableGutters>
         <Button
           component={Link}
-          to="/"
+          to='/'
           classes={{ root: classes.logoContainer }}
         >
-          <Typography variant="h1" classes={{ root: classes.logo }}>
-            <span className={classes.logoText}>VAR</span>
-            {' '}
-            X
+          <Typography variant='h1' classes={{ root: classes.logo }}>
+            <span className={classes.logoText}>VAR</span> X
           </Typography>
         </Button>
         {matchesMD ? drawer : tabs}

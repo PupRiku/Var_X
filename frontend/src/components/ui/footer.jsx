@@ -85,7 +85,7 @@ export default function Footer() {
 
   return (
     <footer className={classes.footer}>
-      <Grid container justifyContent="space-between">
+      <Grid container justifyContent='space-between'>
         {/* Links */}
         <Grid item classes={{ root: classes.linkContainer }}>
           <Grid container>
@@ -94,11 +94,11 @@ export default function Footer() {
                 item
                 key={category}
                 container
-                direction="column"
+                direction='column'
                 classes={{ root: classes.linkColumn }}
               >
                 <Grid item>
-                  <Typography variant="h5">{category}</Typography>
+                  <Typography variant='h5'>{category}</Typography>
                 </Grid>
                 {routes[category].map((route) => (
                   <Grid item key={route.label}>
@@ -106,7 +106,7 @@ export default function Footer() {
                       component={route.link ? Link : 'a'}
                       to={route.link ? route.link : undefined}
                       href={route.href ? route.href : undefined}
-                      variant="body1"
+                      variant='body1'
                       classes={{ body1: classes.link }}
                     >
                       {route.label}
@@ -119,11 +119,11 @@ export default function Footer() {
         </Grid>
         {/* Social Media Icons */}
         <Grid item>
-          <Grid container direction="column" alignItems="center">
+          <Grid container direction='column' alignItems='center'>
             {socialMedia.map((platform) => (
               <Grid item key={platform.alt}>
                 <IconButton
-                  component="a"
+                  component='a'
                   href={platform.link}
                   classes={{ root: classes.icon }}
                   disableRipple

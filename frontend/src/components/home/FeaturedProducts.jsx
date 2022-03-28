@@ -126,7 +126,7 @@ export default function FeaturedProducts() {
   return (
     <Grid
       container
-      direction="column"
+      direction='column'
       justifyContent={matchesMD ? 'space-between' : 'center'}
       classes={{ root: classes.background }}
     >
@@ -134,10 +134,10 @@ export default function FeaturedProducts() {
         const alignment = matchesMD
           ? 'center'
           : i === 0 || i === 3
-            ? 'flex-start'
-            : i === 1 || i === 4
-              ? 'center'
-              : 'flex-end';
+          ? 'flex-start'
+          : i === 1 || i === 4
+          ? 'center'
+          : 'flex-end';
         return (
           <Grid
             item
@@ -145,10 +145,12 @@ export default function FeaturedProducts() {
             justifyContent={alignment}
             key={node.strapiId}
             classes={{ root: classes.productContainer }}
-            alignItems="center"
+            alignItems='center'
           >
             <IconButton
-              onClick={() => (expanded === i ? setExpanded(null) : setExpanded(i))}
+              onClick={() =>
+                expanded === i ? setExpanded(null) : setExpanded(i)
+              }
               classes={{ root: classes.frame }}
             >
               <img
@@ -161,21 +163,21 @@ export default function FeaturedProducts() {
             </IconButton>
             <Grid
               container
-              direction="column"
+              direction='column'
               classes={{
                 root: clsx(classes.slide, {
                   [classes.slideLeft]:
                     !matchesMD && expanded === i && alignment === 'flex-end',
                   [classes.slideRight]:
-                    !matchesMD
-                    && expanded === i
-                    && (alignment === 'flex-start' || alignment === 'center'),
+                    !matchesMD &&
+                    expanded === i &&
+                    (alignment === 'flex-start' || alignment === 'center'),
                   [classes.slideDown]: matchesMD && expanded === i,
                 }),
               }}
             >
               <Grid item>
-                <Typography variant="h4">{node.name.split(' ')[0]}</Typography>
+                <Typography variant='h4'>{node.name.split(' ')[0]}</Typography>
               </Grid>
               <Grid item>
                 <Rating number={5} />
@@ -188,10 +190,10 @@ export default function FeaturedProducts() {
               </Grid>
               <Grid item classes={{ root: classes.exploreContainer }}>
                 <Button classes={{ root: classes.exploreButton }}>
-                  <Typography variant="h5">Details</Typography>
+                  <Typography variant='h5'>Details</Typography>
                   <img
                     src={explore}
-                    alt="go to product details"
+                    alt='go to product details'
                     className={classes.exploreIcon}
                   />
                 </Button>
