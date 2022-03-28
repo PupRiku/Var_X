@@ -5,12 +5,14 @@ import { graphql } from 'gatsby';
 
 import Layout from '../components/ui/layout';
 import DynamicToolbar from '../components/product-list/DynamicToolbar';
+import ListOfProducts from '../components/product-list/ListOfProducts';
 
 export default function ProductList({
   pageContext: { filterOptions, name, description },
-  data,
+  data: {
+    allStrapiProduct: { edges: products },
+  },
 }) {
-  console.log(data);
   return (
     <Layout>
       <Grid container direction='column' alignItems='center'>
@@ -19,6 +21,7 @@ export default function ProductList({
           name={name}
           description={description}
         />
+        <ListOfProducts products={products} />
       </Grid>
     </Layout>
   );
