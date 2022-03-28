@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,7 +25,29 @@ export default function ListOfProducts({ products, layout }) {
   const classes = useStyles({ layout });
 
   const FrameHelper = ({ Frame, product, variant }) => {
-    return <Frame variant={variant} product={product} />;
+    const [selectedSize, setSelectedSize] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
+
+    var sizes = [];
+    var colors = [];
+
+    product.node.variants.map((variant) => {
+      sizes.push(variant.size);
+      colors.push(variant.color);
+    });
+
+    return (
+      <Frame
+        variant={variant}
+        product={product}
+        sizes={sizes}
+        colors={colors}
+        selectedSize={selectedSize}
+        selectedColor={selectedColor}
+        setSelectedSize={setSelectedSize}
+        setSelectedColor={setSelectedColor}
+      />
+    );
   };
 
   return (
