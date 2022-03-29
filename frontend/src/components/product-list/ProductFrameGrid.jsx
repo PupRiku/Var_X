@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
 import frame from '../../images/product-frame-grid.svg';
@@ -32,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginTop: '-0.1rem',
   },
+  invisibility: {
+    visibility: 'hidden',
+  },
 }));
 
 export default function ProductFrameGrid({
@@ -51,7 +55,14 @@ export default function ProductFrameGrid({
   const productName = product.node.name.split(' ')[0];
 
   return (
-    <Grid item>
+    <Grid
+      item
+      classes={{
+        root: clsx({
+          [classes.invisibility]: open === true,
+        }),
+      }}
+    >
       <Grid container direction='column' onClick={() => setOpen(true)}>
         <Grid item classes={{ root: classes.frame }}>
           <img
