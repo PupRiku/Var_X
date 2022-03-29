@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'gatsby';
 
 import Rating from '../home/Rating';
 import Sizes from './Sizes';
@@ -40,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
   chipLabel: {
     fontSize: '2rem',
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
 }));
 
@@ -73,7 +77,14 @@ export default function ProductFrameList({
         classes={{ root: classes.frame }}
       >
         {images.map((image) => (
-          <Grid item key={image.url}>
+          <Grid
+            item
+            key={image.url}
+            component={Link}
+            to={`/${product.node.category.name.toLowerCase()}/${product.node.name
+              .split(' ')[0]
+              .toLowerCase()}`}
+          >
             <img
               src={process.env.GATSBY_STRAPI_URL + image.url}
               alt={image.url}
@@ -90,7 +101,15 @@ export default function ProductFrameList({
         justifyContent='space-between'
         classes={{ root: classes.info }}
       >
-        <Grid item container direction='column'>
+        <Grid
+          item
+          container
+          direction='column'
+          component={Link}
+          to={`/${product.node.category.name.toLowerCase()}/${product.node.name
+            .split(' ')[0]
+            .toLowerCase()}`}
+        >
           <Grid item>
             <Typography variant='h4'>
               {product.node.name.split(' ')[0]}

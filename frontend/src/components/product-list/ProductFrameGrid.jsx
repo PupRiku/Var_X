@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
   invisibility: {
     visibility: 'hidden',
   },
+  frameContainer: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
 export const colorIndex = (product, color) => {
@@ -71,7 +76,7 @@ export default function ProductFrameGrid({
     <Grid
       item
       classes={{
-        root: clsx({
+        root: clsx(classes.frameContainer, {
           [classes.invisibility]: open === true,
         }),
       }}
