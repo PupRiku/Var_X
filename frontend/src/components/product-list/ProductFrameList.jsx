@@ -10,6 +10,8 @@ import Sizes from './Sizes';
 import Swatches from './Swatches';
 import QtyButton from './QtyButton';
 
+import { colorIndex } from './ProductFrameGrid';
+
 import frame from '../../images/product-frame-list.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +55,13 @@ export default function ProductFrameList({
 }) {
   const classes = useStyles();
 
+  const imageIndex = colorIndex(product, selectedColor);
+
+  const images =
+    imageIndex !== -1
+      ? product.node.variants[imageIndex].images
+      : variant.images;
+
   return (
     <Grid item container>
       <Grid
@@ -63,7 +72,7 @@ export default function ProductFrameList({
         justifyContent='space-around'
         classes={{ root: classes.frame }}
       >
-        {variant.images.map((image) => (
+        {images.map((image) => (
           <Grid item key={image.url}>
             <img
               src={process.env.GATSBY_STRAPI_URL + image.url}

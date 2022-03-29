@@ -38,6 +38,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export const colorIndex = (product, color) => {
+  return product.node.variants.indexOf(
+    product.node.variants.filter((variant) => variant.color === color)[0]
+  );
+};
+
 export default function ProductFrameGrid({
   product,
   variant,
@@ -51,7 +57,14 @@ export default function ProductFrameGrid({
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const imgURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url;
+  const imageIndex = colorIndex(product, selectedColor);
+
+  const imgURL =
+    process.env.GATSBY_STRAPI_URL +
+    (imageIndex !== -1
+      ? product.node.variants[imageIndex].images[0].url
+      : variant.images[0].url);
+
   const productName = product.node.name.split(' ')[0];
 
   return (
