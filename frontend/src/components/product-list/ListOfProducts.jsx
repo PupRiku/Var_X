@@ -38,7 +38,10 @@ export default function ListOfProducts({
 
     product.node.variants.map((variant) => {
       sizes.push(variant.size);
-      colors.push(variant.color);
+
+      if (!colors.includes(variant.color)) {
+        colors.push(variant.color);
+      }
     });
 
     return (
