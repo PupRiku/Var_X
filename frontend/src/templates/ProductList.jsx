@@ -83,6 +83,7 @@ export default function ProductList({
           productsPerPage={productsPerPage}
           layout={layout}
           products={products}
+          filterOptions={filterOptions}
         />
         <Pagination
           count={numPages}
