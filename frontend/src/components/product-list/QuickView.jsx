@@ -18,6 +18,7 @@ import frame from '../../images/selected-frame.svg';
 import explore from '../../images/explore.svg';
 
 const useStyles = makeStyles((theme) => ({
+  // todo: explore how to make dialog frame shorter
   selectedFrame: {
     backgroundImage: `url(${frame})`,
     backgroundPosition: 'center',
