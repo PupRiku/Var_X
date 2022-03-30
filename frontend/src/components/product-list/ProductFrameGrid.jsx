@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { navigate } from 'gatsby';
 
 import frame from '../../images/product-frame-grid.svg';
 import QuickView from './QuickView';
@@ -64,6 +66,12 @@ export default function ProductFrameGrid({
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
+  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
+
+  if (matchesMD && open) {
+    setOpen(false);
+  }
+
   const imageIndex = colorIndex(product, variant, selectedColor);
 
   const imgURL =
@@ -83,7 +91,19 @@ export default function ProductFrameGrid({
         }),
       }}
     >
-      <Grid container direction='column' onClick={() => setOpen(true)}>
+      <Grid
+        container
+        direction='column'
+        onClick={() =>
+          matchesMD
+            ? navigate(
+                `/${product.node.category.name.toLowerCase()}/${product.node.name
+                  .split(' ')[0]
+                  .toLowerCase()}`
+              )
+            : setOpen(true)
+        }
+      >
         <Grid item classes={{ root: classes.frame }}>
           <img
             src={imgURL}
