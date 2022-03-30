@@ -4,11 +4,22 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
+import { makeStyles } from '@material-ui/core/styles';
 
 import sort from '../../images/sort.svg';
 import close from '../../images/close-outline.svg';
 
+const useStyles = makeStyles((theme) => ({
+  chipContainer: {
+    [theme.breakpoints.down('md')]: {
+      margin: '0.5rem',
+    },
+  },
+}));
+
 export default function Sort({ setOption }) {
+  const classes = useStyles();
+
   const sortOptions = [
     { label: 'A-Z' },
     { label: 'Z-A' },
@@ -29,7 +40,11 @@ export default function Sort({ setOption }) {
       <Grid item xs>
         <Grid container justifyContent='space-around'>
           {sortOptions.map((option) => (
-            <Grid item key={option.label}>
+            <Grid
+              item
+              key={option.label}
+              classes={{ root: classes.chipContainer }}
+            >
               <Chip label={option.label} />
             </Grid>
           ))}
