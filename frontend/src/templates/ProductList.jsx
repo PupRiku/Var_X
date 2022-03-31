@@ -9,6 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../components/ui/layout';
 import DynamicToolbar from '../components/product-list/DynamicToolbar';
 import ListOfProducts from '../components/product-list/ListOfProducts';
+import {
+  alphabetic,
+  time,
+  price,
+} from '../components/product-list/SortFunctions';
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -52,6 +57,23 @@ export default function ProductList({
   const [layout, setLayout] = useState('grid');
   const [page, setPage] = useState(1);
   const [filterOptions, setFilterOptions] = useState(options);
+  const [sortOptions, setSortOptions] = useState([
+    { label: 'A-Z', active: true, function: (data) => alphabetic(data, 'asc') },
+    {
+      label: 'Z-A',
+      active: false,
+      function: (data) => alphabetic(data, 'desc'),
+    },
+    { label: 'NEWEST', active: false, function: (data) => time(data, 'asc') },
+    { label: 'OLDEST', active: false, function: (data) => time(data, 'desc') },
+    { label: 'PRICE ↑', active: false, function: (data) => price(data, 'asc') },
+    {
+      label: 'PRICE ↓',
+      active: false,
+      function: (data) => price(data, 'desc'),
+    },
+    { label: 'REVIEWS', active: false, function: (data) => data },
+  ]);
   const scrollRef = useRef(null);
 
   const scroll = () => {
@@ -144,6 +166,8 @@ export default function ProductList({
           description={description}
           layout={layout}
           setLayout={setLayout}
+          sortOptions={sortOptions}
+          setSortOptions={setSortOptions}
         />
         <ListOfProducts
           page={page}

@@ -26,13 +26,21 @@ export default function FunctionContainer({
   setFilterOptions,
   option,
   setOption,
+  sortOptions,
+  setSortOptions,
 }) {
   const classes = useStyles({ option });
 
   const content = () => {
     switch (option) {
       case 'sort':
-        return <Sort setOption={setOption} />;
+        return (
+          <Sort
+            setOption={setOption}
+            sortOptions={sortOptions}
+            setSortOptions={setSortOptions}
+          />
+        );
       case 'filter':
         return (
           <Filter
