@@ -87,7 +87,10 @@ export default function ProductList({
   const productsPerPage = layout === 'grid' ? 16 : 6;
 
   var content = [];
-  products.map((product, i) =>
+  const selectedSort = sortOptions.filter((option) => option.active)[0];
+  const sortedProducts = selectedSort.function(products);
+
+  sortedProducts.map((product, i) =>
     product.node.variants.map((variant) =>
       content.push({ product: i, variant })
     )
@@ -198,6 +201,7 @@ export const query = graphql`
       edges {
         node {
           strapiId
+          createdAt
           name
           category {
             name
