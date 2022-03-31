@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Fab from '@material-ui/core/Fab';
 import Pagination from '@material-ui/lab/Pagination';
 import Grid from '@material-ui/core/Grid';
@@ -58,6 +58,10 @@ export default function ProductList({
     scrollRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    setPage(1);
+  }, [filterOptions, layout]);
+
   const productsPerPage = layout === 'grid' ? 16 : 6;
   var numVariants = 0;
 
@@ -76,7 +80,6 @@ export default function ProductList({
           description={description}
           layout={layout}
           setLayout={setLayout}
-          setPage={setPage}
         />
         <ListOfProducts
           page={page}
