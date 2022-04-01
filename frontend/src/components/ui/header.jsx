@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -68,21 +69,22 @@ export default function Header({ categories }) {
 
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-  const routes = [
-    ...categories,
-    { node: { name: 'Contact Us', strapiId: 'contact', link: '/contact' } },
-  ];
-
   const activeIndex = () => {
     const found = routes.indexOf(
       routes.filter(
         ({ node: { name, link } }) =>
-          (link || `/${name.toLowerCase()}`) === window.location.pathname
+          (link || `/${name.toLowerCase()}`) ===
+          `/${window.location.pathname.split('/')[1]}`
       )[0]
     );
 
     return found === -1 ? false : found;
   };
+
+  const routes = [
+    ...categories,
+    { node: { name: 'Contact Us', strapiId: 'contact', link: '/contact' } },
+  ];
 
   const tabs = (
     <Tabs
