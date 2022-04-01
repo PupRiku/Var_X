@@ -76,6 +76,10 @@ export default function ListOfProducts({
       }
     });
 
+    const hasStyles = product.node.variants.some(
+      (variant) => variant.style !== null
+    );
+
     return (
       <Frame
         variant={variant}
@@ -86,6 +90,7 @@ export default function ListOfProducts({
         selectedColor={selectedColor}
         setSelectedSize={setSelectedSize}
         setSelectedColor={setSelectedColor}
+        hasStyles={hasStyles}
       />
     );
   };
