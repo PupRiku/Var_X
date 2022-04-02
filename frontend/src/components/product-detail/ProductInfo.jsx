@@ -273,7 +273,7 @@ export default function ProductInfo({
             </Grid>
           </Grid>
           <Grid item>
-            <QtyButton />
+            <QtyButton stock={stock} selectedVariant={selectedVariant} />
           </Grid>
         </Grid>
       </Grid>

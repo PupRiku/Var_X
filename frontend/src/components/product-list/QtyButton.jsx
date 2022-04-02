@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -53,9 +53,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function QtyButton() {
+export default function QtyButton({ stock, selectedVariant }) {
   const classes = useStyles();
   const [qty, setQty] = useState(1);
+
+  const handleChange = (direction) => {
+    if (qty === stock[selectedVariant].qty && direction === 'up') {
+      return null;
+    }
+    if (qty === 1 && direction === 'down') {
+      return null;
+    }
+
+    const newQty = direction === 'up' ? qty + 1 : qty - 1;
+
+    setQty(newQty);
+  };
+
+  useEffect(() => {
+    if (stock === null || stock === -1) {
+      return undefined;
+    } else if (qty > stock[selectedVariant].qty) {
+      setQty(stock[selectedVariant].qty);
+    }
+  }, [stock, selectedVariant]);
 
   return (
     <Grid item>
@@ -68,7 +89,7 @@ export default function QtyButton() {
         <ButtonGroup orientation='vertical'>
           <Button
             classes={{ root: classes.editButtons }}
-            onClick={() => setQty(qty + 1)}
+            onClick={() => handleChange('up')}
           >
             <Typography variant='h3' classes={{ root: classes.qtyText }}>
               +
@@ -76,7 +97,7 @@ export default function QtyButton() {
           </Button>
           <Button
             classes={{ root: clsx(classes.editButtons, classes.minusButton) }}
-            onClick={() => setQty(qty - 1)}
+            onClick={() => handleChange('down')}
           >
             <Typography
               variant='h3'

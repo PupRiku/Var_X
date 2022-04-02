@@ -161,7 +161,7 @@ export default function ProductFrameList({
             setSelectedColor={setSelectedColor}
           />
         </Grid>
-        <QtyButton />
+        <QtyButton stock={stock} selectedVariant={selectedVariant} />
       </Grid>
     </Grid>
   );
