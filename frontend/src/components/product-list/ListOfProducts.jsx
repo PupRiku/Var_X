@@ -67,6 +67,7 @@ export default function ListOfProducts({
   const FrameHelper = ({ Frame, product, variant }) => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedVariant, setSelectedVariant] = useState(null);
     const [stock, setStock] = useState(null);
 
     const { loading, error, data } = useQuery(GET_DETAILS, {
@@ -84,13 +85,32 @@ export default function ListOfProducts({
     var sizes = [];
     var colors = [];
 
-    product.node.variants.map((variant) => {
-      sizes.push(variant.size);
+    product.node.variants.map((item) => {
+      sizes.push(item.size);
 
-      if (!colors.includes(variant.color)) {
-        colors.push(variant.color);
+      if (
+        !colors.includes(item.color) &&
+        item.size === (selectedSize || variant.size) &&
+        item.style === variant.style
+      ) {
+        colors.push(item.color);
       }
     });
+
+    useEffect(() => {
+      if (selectedSize === null) return undefined;
+
+      setSelectedColor(null);
+
+      const newVariant = product.node.variants.find(
+        (item) =>
+          item.size === selectedSize &&
+          item.style === variant.style &&
+          item.color === colors[0]
+      );
+
+      setSelectedVariant(newVariant);
+    }, [selectedSize]);
 
     const hasStyles = product.node.variants.some(
       (variant) => variant.style !== null
@@ -98,11 +118,11 @@ export default function ListOfProducts({
 
     return (
       <Frame
-        variant={variant}
+        variant={selectedVariant || variant}
         product={product}
         sizes={sizes}
         colors={colors}
-        selectedSize={selectedSize}
+        selectedSize={selectedSize || variant.size}
         selectedColor={selectedColor}
         setSelectedSize={setSelectedSize}
         setSelectedColor={setSelectedColor}
