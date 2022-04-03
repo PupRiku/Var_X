@@ -16,11 +16,45 @@ import showPassword from '../../images/show-password.svg';
 import addUserIcon from '../../images/add-user.svg';
 import forgotPasswordIcon from '../../images/forgot.svg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   emailAdornment: {
     height: 17,
     width: 22,
     marginBottom: 10,
+  },
+  accountIcon: {
+    marginTop: '2rem',
+  },
+  textField: {
+    width: '20rem',
+  },
+  input: {
+    color: theme.palette.secondary.main,
+  },
+  login: {
+    width: '20rem',
+    borderRadius: 50,
+    textTransform: 'none',
+  },
+  facebookText: {
+    fontSize: '1.5rem',
+    fontWeight: 700,
+    textTransform: 'none',
+  },
+  facebookButton: {
+    marginTop: '-1rem',
+  },
+  visibleIcon: {
+    padding: 0,
+  },
+  '@global': {
+    '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
+      {
+        borderBottom: `2px solid ${theme.palette.secondary.main}`,
+      },
+    '.MuiInput-underline:after': {
+      borderBottom: `2px solid ${theme.palette.primary.main}`,
+    },
   },
 }));
 
@@ -32,13 +66,13 @@ export default function Login() {
 
   return (
     <>
-      <Grid item>
+      <Grid item classes={{ root: classes.accountIcon }}>
         <img src={accountIcon} alt='login page' />
       </Grid>
       <Grid item>
         <TextField
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           classes={{ root: classes.textField }}
           placeholder='Email'
           InputProps={{
@@ -56,9 +90,10 @@ export default function Login() {
       <Grid item>
         <TextField
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
           classes={{ root: classes.textField }}
           placeholder='Password'
+          type={visible ? 'text' : 'password'}
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>
@@ -67,10 +102,15 @@ export default function Login() {
             ),
             endAdornment: (
               <InputAdornment position='end'>
-                <img
-                  src={visible ? showPassword : hidePassword}
-                  alt={`${visible ? 'Show' : 'Hide'} Password`}
-                />
+                <IconButton
+                  onClick={() => setVisible(!visible)}
+                  classes={{ root: classes.visibleIcon }}
+                >
+                  <img
+                    src={visible ? showPassword : hidePassword}
+                    alt={`${visible ? 'Show' : 'Hide'} Password`}
+                  />
+                </IconButton>
               </InputAdornment>
             ),
             classes: { input: classes.input },
@@ -78,13 +118,19 @@ export default function Login() {
         />
       </Grid>
       <Grid item>
-        <Button variant='contained' color='secondary'>
+        <Button
+          variant='contained'
+          color='secondary'
+          classes={{ root: classes.login }}
+        >
           <Typography variant='h5'>login</Typography>
         </Button>
       </Grid>
       <Grid item>
-        <Button>
-          <Typography variant='h3'>login with Facebook</Typography>
+        <Button classes={{ root: classes.facebookButton }}>
+          <Typography variant='h3' classes={{ root: classes.facebookText }}>
+            login with Facebook
+          </Typography>
         </Button>
       </Grid>
       <Grid item container justifyContent='space-between'>
