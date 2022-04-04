@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +19,7 @@ import PhoneAdornment from '../images/PhoneAdornment';
 import Layout from '../components/ui/layout';
 import validate from '../components/ui/validate';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   mainContainer: {
     height: '45rem',
     backgroundColor: theme.palette.primary.main,
@@ -158,8 +159,8 @@ function ContactPage() {
   const classes = useStyles();
   const theme = useTheme();
 
-  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
-  const matchesXS = useMediaQuery((theme) => theme.breakpoints.down('xs'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const [values, setValues] = useState({
     name: '',
@@ -232,7 +233,7 @@ function ContactPage() {
   ];
 
   const disabled =
-    Object.keys(errors).some((error) => errors[error] === true) ||
+    Object.keys(errors).some(error => errors[error] === true) ||
     Object.keys(errors).length !== 4;
 
   return (
@@ -263,10 +264,9 @@ function ContactPage() {
             </Grid>
             <Grid item>
               <Grid container direction='column'>
-                {Object.keys(fields).map((field) => {
-                  const validateHelper = (event) => {
-                    const valid = validate({ [field]: event.target.value });
-                    setErrors({ ...errors, [field]: !valid[field] });
+                {Object.keys(fields).map(field => {
+                  const validateHelper = event => {
+                    return validate({ [field]: event.target.value });
                   };
 
                   return (
@@ -282,13 +282,17 @@ function ContactPage() {
                     >
                       <TextField
                         value={values[field]}
-                        onChange={(e) => {
-                          if (errors[field]) {
-                            validateHelper(e);
+                        onChange={e => {
+                          const valid = validateHelper(e);
+                          if (errors[field] || valid[field] === true) {
+                            setErrors({ ...errors, [field]: !valid[field] });
                           }
                           setValues({ ...values, [field]: e.target.value });
                         }}
-                        onBlur={(e) => validateHelper(e)}
+                        onBlur={e => {
+                          const valid = validateHelper(e);
+                          setErrors({ ...errors, [field]: !valid[field] });
+                        }}
                         error={errors[field]}
                         helperText={errors[field] && fields[field].helperText}
                         placeholder={fields[field].placeholder}
