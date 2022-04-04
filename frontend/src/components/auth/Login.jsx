@@ -18,6 +18,7 @@ import hidePassword from '../../images/hide-password.svg';
 import showPassword from '../../images/show-password.svg';
 import addUserIcon from '../../images/add-user.svg';
 import forgotPasswordIcon from '../../images/forgot.svg';
+import close from '../../images/close.svg';
 
 const useStyles = makeStyles(theme => ({
   emailAdornment: {
@@ -53,6 +54,12 @@ const useStyles = makeStyles(theme => ({
   passwordError: {
     marginTop: 0,
   },
+  close: {
+    paddingTop: 5,
+  },
+  reset: {
+    marginTop: '-4rem',
+  },
   '@global': {
     '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
       {
@@ -73,6 +80,7 @@ export default function Login() {
   });
   const [errors, setErrors] = useState({});
   const [visible, setVisible] = useState(false);
+  const [forgot, setForgot] = useState(false);
 
   const fields = {
     email: {
@@ -89,6 +97,7 @@ export default function Login() {
       helperText:
         'your password must be at least 8 characters and include one uppercase letter, one number, and one special character',
       placeholder: 'Password',
+      hidden: forgot,
       type: visible ? 'text' : 'password',
       startAdornment: <img src={passwordAdornment} alt='password' />,
       endAdornment: (
@@ -111,7 +120,7 @@ export default function Login() {
           setErrors({ ...errors, [field]: !valid[field] });
         };
 
-        return (
+        return !fields[field].hidden ? (
           <Grid item key={field}>
             <TextField
               value={values[field]}
@@ -147,39 +156,57 @@ export default function Login() {
               }}
             />
           </Grid>
-        );
+        ) : null;
       })}
       <Grid item>
         <Button
           variant='contained'
           color='secondary'
-          classes={{ root: classes.login }}
-        >
-          <Typography variant='h5'>login</Typography>
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
           classes={{
-            root: clsx(classes.facebookButton, {
-              [classes.passwordError]: errors.password,
+            root: clsx(classes.login, {
+              [classes.reset]: forgot,
             }),
           }}
         >
-          <Typography variant='h3' classes={{ root: classes.facebookText }}>
-            login with Facebook
+          <Typography variant='h5'>
+            {forgot ? 'reset password' : 'login'}
           </Typography>
         </Button>
       </Grid>
+      {forgot ? null : (
+        <Grid item>
+          <Button
+            classes={{
+              root: clsx(classes.facebookButton, {
+                [classes.passwordError]: errors.password,
+              }),
+            }}
+          >
+            <Typography variant='h3' classes={{ root: classes.facebookText }}>
+              login with Facebook
+            </Typography>
+          </Button>
+        </Grid>
+      )}
       <Grid item container justifyContent='space-between'>
         <Grid item>
           <IconButton>
             <img src={addUserIcon} alt='sign up' />
           </IconButton>
         </Grid>
-        <Grid item>
-          <IconButton>
-            <img src={forgotPasswordIcon} alt='forgot password' />
+        <Grid
+          item
+          classes={{
+            root: clsx({
+              [classes.close]: forgot,
+            }),
+          }}
+        >
+          <IconButton onClick={() => setForgot(!forgot)}>
+            <img
+              src={forgot ? close : forgotPasswordIcon}
+              alt={forgot ? 'back to login' : 'forgot password'}
+            />
           </IconButton>
         </Grid>
       </Grid>
