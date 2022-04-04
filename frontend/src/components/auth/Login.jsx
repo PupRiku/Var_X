@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -48,6 +49,9 @@ const useStyles = makeStyles(theme => ({
   },
   visibleIcon: {
     padding: 0,
+  },
+  passwordError: {
+    marginTop: 0,
   },
   '@global': {
     '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
@@ -155,7 +159,13 @@ export default function Login() {
         </Button>
       </Grid>
       <Grid item>
-        <Button classes={{ root: classes.facebookButton }}>
+        <Button
+          classes={{
+            root: clsx(classes.facebookButton, {
+              [classes.passwordError]: errors.password,
+            }),
+          }}
+        >
           <Typography variant='h3' classes={{ root: classes.facebookText }}>
             login with Facebook
           </Typography>
