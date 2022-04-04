@@ -71,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Login() {
+export default function Login({ steps, setSelectedStep }) {
   const classes = useStyles();
 
   const [values, setValues] = useState({
@@ -107,6 +107,11 @@ export default function Login() {
         />
       ),
     },
+  };
+
+  const navigateSignUp = () => {
+    const signUp = steps.find(step => step.label === 'Sign Up');
+    setSelectedStep(steps.indexOf(signUp));
   };
 
   return (
@@ -190,7 +195,7 @@ export default function Login() {
       )}
       <Grid item container justifyContent='space-between'>
         <Grid item>
-          <IconButton>
+          <IconButton onClick={navigateSignUp}>
             <img src={addUserIcon} alt='sign up' />
           </IconButton>
         </Grid>
