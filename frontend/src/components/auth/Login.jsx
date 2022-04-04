@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -111,6 +112,25 @@ export default function Login({ steps, setSelectedStep }) {
     setSelectedStep(steps.indexOf(signUp));
   };
 
+  const handleLogin = () => {
+    axios
+      .post(process.env.GATSBY_STRAPI_URL + '/auth/local', {
+        identifier: values.email,
+        password: values.password,
+      })
+      .then(res => {
+        console.log('User Profile', res.data.user);
+        console.log('JWT', res.data.jwt);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const disabled =
+    Object.keys(errors).some(error => errors[error] === true) ||
+    Object.keys(errors).length !== Object.keys(values).length;
+
   return (
     <>
       <Grid item classes={{ root: classes.accountIcon }}>
@@ -127,6 +147,8 @@ export default function Login({ steps, setSelectedStep }) {
         <Button
           variant='contained'
           color='secondary'
+          disabled={!forgot && disabled}
+          onClick={() => (forgot ? null : handleLogin())}
           classes={{
             root: clsx(classes.login, {
               [classes.reset]: forgot,
