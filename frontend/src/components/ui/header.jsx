@@ -20,7 +20,7 @@ import cart from '../../images/cart.svg';
 import account from '../../images/account-header.svg';
 import menu from '../../images/menu.svg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   coloredIndicator: {
     backgroundColor: '#fff',
   },
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tab: {
     ...theme.typography.body1,
-    fontWeight: 600,
+    fontWeight: 500,
   },
   tabs: {
     marginLeft: 'auto',
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header({ categories }) {
   const classes = useStyles();
-  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -91,7 +91,7 @@ export default function Header({ categories }) {
       value={activeIndex()}
       classes={{ indicator: classes.coloredIndicator, root: classes.tabs }}
     >
-      {routes.map((route) => (
+      {routes.map(route => (
         <Tab
           component={Link}
           to={route.node.link || `/${route.node.name.toLowerCase()}`}
@@ -173,7 +173,7 @@ export default function Header({ categories }) {
           </Typography>
         </Button>
         {matchesMD ? drawer : tabs}
-        {actions.map((action) => {
+        {actions.map(action => {
           if (action.visible) {
             return (
               <IconButton
