@@ -130,7 +130,9 @@ export default function Login({
       })
       .then(res => {
         setLoading(false);
-        dispatchUser(setUser({ ...res.data.user, jwt: res.data.jwt }));
+        dispatchUser(
+          setUser({ ...res.data.user, jwt: res.data.jwt, onboarding: true })
+        );
       })
       .catch(error => {
         const { message } = error.response.data.message[0].messages[0];

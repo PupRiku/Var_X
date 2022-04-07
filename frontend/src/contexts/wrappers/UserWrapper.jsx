@@ -25,7 +25,9 @@ export function UserWrapper({ children }) {
             },
           })
           .then(res => {
-            dispatchUser(setUser({ ...res.data, jwt: storedUser.jwt }));
+            dispatchUser(
+              setUser({ ...res.data, jwt: storedUser.jwt, onboarding: true })
+            );
           })
           .catch(err => {
             console.error(err);
