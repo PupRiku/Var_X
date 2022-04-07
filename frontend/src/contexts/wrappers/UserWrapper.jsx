@@ -1,5 +1,6 @@
 /* eslint-disable */
-import React, { useReducer, createContext } from 'react';
+import React, { useEffect, useReducer, createContext } from 'react';
+import axios from 'axios';
 import userReducer from '../reducers/user-reducer';
 import { setUser } from '../actions';
 
@@ -13,6 +14,26 @@ export function UserWrapper({ children }) {
     userReducer,
     storedUser || defaultUser
   );
+
+  useEffect(() => {
+    if (storedUser) {
+      setTimeout(() => {
+        axios
+          .get(process.env.GATSBY_STRAPI_URL + '/users/me', {
+            headers: {
+              Authorization: `Bearer ${storedUser.jwt}`,
+            },
+          })
+          .then(res => {
+            dispatchUser(setUser({ ...res.data, jwt: storedUser.jwt }));
+          })
+          .catch(err => {
+            console.error(err);
+            dispatchUser(setUser(defaultUser));
+          });
+      }, 3000);
+    }
+  }, []);
 
   return (
     <UserProvider value={{ user, dispatchUser, defaultUser }}>
