@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Fields from './fields';
 import { EmailPassword } from './Login';
-import { setUser } from '../../contexts/actions';
+import { setUser, setSnackbar } from '../../contexts/actions';
 
 import addUserIcon from '../../images/add-user.svg';
 import nameAdornment from '../../images/name-adornment.svg';
@@ -58,7 +58,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp({ steps, setSelectedStep, dispatchUser }) {
+export default function SignUp({
+  steps,
+  setSelectedStep,
+  dispatchUser,
+  dispatchFeedback,
+}) {
   const classes = useStyles();
   const [values, setValues] = useState({
     email: '',
@@ -98,8 +103,9 @@ export default function SignUp({ steps, setSelectedStep, dispatchUser }) {
         setSelectedStep(steps.indexOf(complete));
       })
       .catch(err => {
+        const { message } = err.response.data.message[0].messages[0];
         setLoading(false);
-        console.error(err);
+        dispatchFeedback(setSnackbar({ status: 'error', message }));
       });
   };
 
