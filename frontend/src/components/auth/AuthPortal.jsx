@@ -19,14 +19,27 @@ const useStyles = makeStyles(theme => ({
     width: '50rem',
     height: '40rem',
     borderRadius: 0,
+    [theme.breakpoints.down('md')]: {
+      width: '30rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      borderWidth: '0.75rem',
+      width: 'calc(100vw - 2.6rem)',
+    },
   },
   inner: {
     height: '40rem',
     width: '100%',
     border: `2rem solid ${theme.palette.primary.main}`,
+    [theme.breakpoints.down('xs')]: {
+      borderWidth: '0.75rem',
+    },
   },
   container: {
     marginBottom: '8rem',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '5rem',
+    },
   },
   '@global': {
     '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
