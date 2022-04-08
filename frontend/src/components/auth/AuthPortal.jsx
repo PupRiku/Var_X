@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -10,6 +11,7 @@ import SignUp from './SignUp';
 import Complete from './Complete';
 import Reset from './Reset';
 import { UserContext, FeedbackContext } from '../../contexts';
+import { setUser, setSnackbar } from '../../contexts/actions';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -53,10 +55,30 @@ export default function AuthPortal() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
+    const access_token = params.get('access_token');
 
     if (code) {
       const resetStep = steps.find(step => step.label === 'Reset');
       setSelectedStep(steps.indexOf(resetStep));
+    } else if (access_token) {
+      axios
+        .get(process.env.GATSBY_STRAPI_URL + '/auth/facebook/callback', {
+          params: { access_token },
+        })
+        .then(res => {
+          dispatchUser(
+            setUser({ ...res.data.user, jwt: res.data.jwt, onboarding: true })
+          );
+          window.history.replaceState(null, null, window.location.pathname);
+        })
+        .catch(err => {
+          dispatchFeedback(
+            setSnackbar({
+              status: 'error',
+              message: 'Connecting To Facebook failed, pelase try again.',
+            })
+          );
+        });
     }
   }, []);
 
