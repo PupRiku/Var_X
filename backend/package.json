@@ -9,7 +9,10 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
+    "babel-eslint": "^10.1.0"
+  },
   "dependencies": {
     "prettier": "^2.5.1",
     "strapi": "3.1.4",
