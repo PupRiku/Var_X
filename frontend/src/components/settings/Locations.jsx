@@ -34,16 +34,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Locations({ user, edit, setChangesMade }) {
+export default function Locations({
+  user,
+  edit,
+  setChangesMade,
+  values,
+  setValues,
+  slot,
+  setSlot,
+}) {
   const classes = useStyles();
-  const [values, setValues] = useState({
-    street: '',
-    zip: '',
-    city: '',
-    state: '',
-  });
   const [errors, setErrors] = useState({});
-  const [slot, setSlot] = useState(0);
 
   useEffect(() => {
     setValues(user.locations[slot]);
