@@ -21,10 +21,10 @@ module.exports = {
       typeof location !== 'undefined' &&
       typeof locationSlot !== 'undefined'
     ) {
-      newLocations[locationSlot] = locations;
+      newLocations[locationSlot] = location;
     }
 
-    let newUser = await strapi.plugins['user-permissions'].services.user.edit(
+    let newUser = await strapi.plugins['users-permissions'].services.user.edit(
       { id },
       { contactInfo: newInfo, locations: newLocations }
     );
