@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -33,6 +33,7 @@ export default function Settings({ setSelectedSetting }) {
     password: '********',
   });
   const [detailSlot, setDetailSlot] = useState(0);
+  const [detailErrors, setDetailErrors] = useState({});
   const [locationValues, setLocationValues] = useState({
     street: '',
     zip: '',
@@ -40,6 +41,20 @@ export default function Settings({ setSelectedSetting }) {
     state: '',
   });
   const [locationSlot, setLocationSlot] = useState(0);
+  const [locationErrors, setLocationErrors] = useState({});
+
+  const allErrors = { ...detailErrors, ...locationErrors };
+  const isError = Object.keys(allErrors).some(
+    error => allErrors[error] === true
+  );
+
+  useEffect(() => {
+    setDetailErrors({});
+  }, [detailSlot]);
+
+  useEffect(() => {
+    setLocationErrors({});
+  }, [locationSlot]);
 
   return (
     <>
@@ -52,6 +67,8 @@ export default function Settings({ setSelectedSetting }) {
           setValues={setDetailValues}
           slot={detailSlot}
           setSlot={setDetailSlot}
+          errors={detailErrors}
+          setErrors={setDetailErrors}
         />
         <Payments user={user} edit={edit} />
       </Grid>
@@ -67,6 +84,8 @@ export default function Settings({ setSelectedSetting }) {
           setValues={setLocationValues}
           slot={locationSlot}
           setSlot={setLocationSlot}
+          errors={locationErrors}
+          setErrors={setLocationErrors}
         />
         <Edit
           setSelectedSetting={setSelectedSetting}
@@ -80,6 +99,7 @@ export default function Settings({ setSelectedSetting }) {
           locations={locationValues}
           detailSlot={detailSlot}
           locationSlot={locationSlot}
+          isError={isError}
         />
       </Grid>
     </>
