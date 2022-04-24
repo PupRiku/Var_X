@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Locations({ user }) {
+export default function Locations({ user, edit, setChangesMade }) {
   const classes = useStyles();
   const [values, setValues] = useState({
     street: '',
@@ -48,6 +48,13 @@ export default function Locations({ user }) {
   useEffect(() => {
     setValues(user.locations[slot]);
   }, [slot]);
+
+  useEffect(() => {
+    const changed = Object.keys(user.locations[slot]).some(
+      field => values[field] !== user.locations[slot][field]
+    );
+    setChangesMade(changed);
+  }, [values]);
 
   const fields = {
     street: {
@@ -93,6 +100,7 @@ export default function Locations({ user }) {
           errors={errors}
           setErrors={setErrors}
           isWhite
+          disabled={!edit}
         />
       </Grid>
       <Grid item classes={{ root: classes.chipWrapper }}>

@@ -19,8 +19,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Edit({ setSelectedSetting }) {
+export default function Edit({ setSelectedSetting, edit, setEdit }) {
   const classes = useStyles();
+
+  const handleEdit = () => {
+    setEdit(!edit);
+  };
 
   return (
     <Grid
@@ -39,8 +43,12 @@ export default function Edit({ setSelectedSetting }) {
         </IconButton>
       </Grid>
       <Grid item>
-        <IconButton>
-          <img src={editIcon} alt='edit settings' className={classes.icon} />
+        <IconButton onClick={handleEdit}>
+          <img
+            src={edit ? saveIcon : editIcon}
+            alt={`${edit ? 'save' : 'edit'} settings`}
+            className={classes.icon}
+          />
         </IconButton>
       </Grid>
     </Grid>
