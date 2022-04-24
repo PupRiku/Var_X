@@ -63,6 +63,7 @@ export default function Details() {
     password: '',
   });
   const [errors, setErrors] = useState({});
+  const [slot, setSlot] = useState(0);
 
   const email_password = EmailPassword(
     classes,
@@ -126,7 +127,7 @@ export default function Details() {
         </Grid>
       ))}
       <Grid item container classes={{ root: classes.slotContainer }}>
-        <Slots />
+        <Slots slot={slot} setSlot={setSlot} />
       </Grid>
     </Grid>
   );
