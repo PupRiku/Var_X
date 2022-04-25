@@ -18,7 +18,7 @@ import { getStockDisplay } from '../product-detail/ProductInfo';
 import frame from '../../images/selected-frame.svg';
 import explore from '../../images/explore.svg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   // todo: explore how to make dialog frame shorter
   selectedFrame: {
     backgroundImage: `url(${frame})`,
@@ -186,7 +186,12 @@ export default function QuickView({
                   setSelectedColor={setSelectedColor}
                 />
                 <span className={classes.qtyContainer}>
-                  <QtyButton stock={stock} selectedVariant={selectedVariant} />
+                  <QtyButton
+                    stock={stock}
+                    selectedVariant={selectedVariant}
+                    name={name}
+                    variants={product.node.variants}
+                  />
                 </span>
               </Grid>
             </Grid>

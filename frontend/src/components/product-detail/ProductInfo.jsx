@@ -17,7 +17,7 @@ import { colorIndex } from '../product-list/ProductFrameGrid';
 import favorite from '../../images/favorite.svg';
 import subscription from '../../images/subscription.svg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   background: {
     backgroundColor: theme.palette.secondary.main,
     height: '45rem',
@@ -131,7 +131,7 @@ export default function ProductInfo({
   );
   const [selectedColor, setSelectedColor] = useState(null);
 
-  const matchesXS = useMediaQuery((theme) => theme.breakpoints.down('xs'));
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const imageIndex = colorIndex(
     { node: { variants } },
@@ -141,7 +141,7 @@ export default function ProductInfo({
 
   const sizes = [];
   const colors = [];
-  variants.map((variant) => {
+  variants.map(variant => {
     sizes.push(variant.size);
 
     if (
@@ -157,7 +157,7 @@ export default function ProductInfo({
     setSelectedColor(null);
 
     const newVariant = variants.find(
-      (variant) =>
+      variant =>
         variant.size === selectedSize &&
         variant.style === variants[selectedVariant].style &&
         variant.color === colors[0]
@@ -292,7 +292,12 @@ export default function ProductInfo({
             </Grid>
           </Grid>
           <Grid item>
-            <QtyButton stock={stock} selectedVariant={selectedVariant} />
+            <QtyButton
+              stock={stock}
+              selectedVariant={selectedVariant}
+              name={name}
+              variants={variants}
+            />
           </Grid>
         </Grid>
       </Grid>

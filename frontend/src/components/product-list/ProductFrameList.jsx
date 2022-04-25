@@ -16,7 +16,7 @@ import { colorIndex } from './ProductFrameGrid';
 
 import frame from '../../images/product-frame-list.svg';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   frame: {
     backgroundImage: `url(${frame})`,
     backgroundPosition: 'center',
@@ -90,7 +90,7 @@ export default function ProductFrameList({
         justifyContent='space-around'
         classes={{ root: classes.frame }}
       >
-        {images.map((image) => (
+        {images.map(image => (
           <Grid
             item
             key={image.url}
@@ -161,7 +161,12 @@ export default function ProductFrameList({
             setSelectedColor={setSelectedColor}
           />
         </Grid>
-        <QtyButton stock={stock} selectedVariant={selectedVariant} />
+        <QtyButton
+          stock={stock}
+          selectedVariant={selectedVariant}
+          name={product.node.name.split(' ')[0]}
+          variants={product.node.variants}
+        />
       </Grid>
     </Grid>
   );
