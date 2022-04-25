@@ -127,7 +127,7 @@ export default function QtyButton({ stock, variants, selectedVariant, name }) {
           onClick={handleCart}
         >
           <Badge
-            overlap='circle'
+            overlap='circular'
             badgeContent='+'
             classes={{ badge: classes.badge }}
           >
