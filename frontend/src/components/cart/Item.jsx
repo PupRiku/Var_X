@@ -42,6 +42,11 @@ const useStyles = makeStyles(theme => ({
   itemContainer: {
     margin: '2rem 0 2rem 2rem',
   },
+  actionButton: {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 }));
 
 export default function Item({ item }) {
@@ -103,7 +108,10 @@ export default function Item({ item }) {
           <Grid item container justifyContent='flex-end' xs>
             {actions.map((action, i) => (
               <Grid item key={i}>
-                <IconButton>
+                <IconButton
+                  disableRipple
+                  classes={{ root: classes.actionButton }}
+                >
                   <span
                     className={classes.actionWrapper}
                     style={{ height: action.size, width: action.size }}
