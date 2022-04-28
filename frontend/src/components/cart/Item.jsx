@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
@@ -7,6 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import QtyButton from '../product-list/QtyButton';
+
+import { CartContext } from '../../contexts';
+import { removeFromCart } from '../../contexts/actions';
 
 import FavoriteIcon from '../../images/Favorite';
 import SubscribeIcon from '../../images/Subscription';
@@ -52,11 +55,21 @@ const useStyles = makeStyles(theme => ({
 export default function Item({ item }) {
   const classes = useStyles();
   const theme = useTheme();
+  const { dispatchCart } = useContext(CartContext);
+
+  const handleDelete = () => {
+    dispatchCart(removeFromCart(item.variant, item.qty));
+  };
 
   const actions = [
     { icon: FavoriteIcon, color: theme.palette.secondary.main },
     { icon: SubscribeIcon, color: theme.palette.secondary.main },
-    { icon: DeleteIcon, color: theme.palette.error.main, size: '2.5rem' },
+    {
+      icon: DeleteIcon,
+      color: theme.palette.error.main,
+      size: '2.5rem',
+      onClick: handleDelete,
+    },
   ];
 
   return (
@@ -111,6 +124,7 @@ export default function Item({ item }) {
                 <IconButton
                   disableRipple
                   classes={{ root: classes.actionButton }}
+                  onClick={() => action.onClick()}
                 >
                   <span
                     className={classes.actionWrapper}
