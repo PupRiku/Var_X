@@ -38,7 +38,7 @@ export default function cartReducer(state, action) {
 
       return newCart;
     case REMOVE_FROM_CART:
-      const newQty = newCart[existingIndex.qty] - action.payload.qty;
+      const newQty = newCart[existingIndex].qty - action.payload.qty;
 
       if (newQty <= 0) {
         newCart = newCart.filter(
