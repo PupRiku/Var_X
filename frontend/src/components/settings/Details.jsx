@@ -1,8 +1,11 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -28,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 10,
   },
   icon: {
-    marginBottom: '3rem',
+    marginBottom: ({ checkout }) => (checkout ? '1rem' : '3rem'),
     [theme.breakpoints.down('xs')]: {
       marginBottom: '1rem',
     },
@@ -57,6 +60,11 @@ const useStyles = makeStyles(theme => ({
       height: '30rem',
     },
   },
+  fieldContainerCart: {
+    '& > *': {
+      marginBottom: '1rem',
+    },
+  },
   '@global': {
     '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
       {
@@ -78,9 +86,11 @@ export default function Details({
   setSlot,
   errors,
   setErrors,
+  billing,
+  setBilling,
   checkout,
 }) {
-  const classes = useStyles();
+  const classes = useStyles({ checkout });
   const [visible, setVisible] = useState(false);
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
@@ -135,7 +145,7 @@ export default function Details({
       item
       container
       direction='column'
-      lg={6}
+      lg={checkout ? 12 : 6}
       xs={12}
       alignItems='center'
       justifyContent='center'
@@ -153,9 +163,14 @@ export default function Details({
           container
           justifyContent='center'
           key={i}
-          classes={{ root: classes.fieldContainer }}
-          direction={matchesXS ? 'column' : 'row'}
-          alignItems={matchesXS ? 'center' : undefined}
+          classes={{
+            root: clsx({
+              [classes.fieldContainerCart]: checkout,
+              [classes.fieldContainer]: !checkout,
+            }),
+          }}
+          direction={matchesXS || checkout ? 'column' : 'row'}
+          alignItems={matchesXS || checkout ? 'center' : undefined}
         >
           <Fields
             fields={pair}
@@ -165,12 +180,17 @@ export default function Details({
             setErrors={setErrors}
             isWhite
             disabled={checkout ? false : !edit}
-            settings
+            settings={!checkout}
           />
         </Grid>
       ))}
       <Grid item container classes={{ root: classes.slotContainer }}>
         <Slots slot={slot} setSlot={setSlot} />
+        {checkout && (
+          <Grid item>
+            <FormControlLabel control={<Switch />} />
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );
