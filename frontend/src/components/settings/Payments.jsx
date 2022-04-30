@@ -49,9 +49,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Payments({ user }) {
+export default function Payments({ user, slot, setSlot }) {
   const classes = useStyles();
-  const [slot, setSlot] = useState(0);
 
   const card = user.paymentMethods[slot];
 
