@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -39,6 +40,31 @@ const useStyles = makeStyles(theme => ({
   priceLabel: {
     fontSize: '1.5rem',
   },
+  darkBackground: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+  fieldRow: {
+    height: '2.5rem',
+  },
+  iconWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centerText: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  adornmentWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  priceValue: {
+    marginRight: '1rem',
+  },
+  fieldWrapper: {
+    marginLeft: '1.25rem',
+  },
 }));
 
 export default function Confirmation() {
@@ -48,7 +74,7 @@ export default function Confirmation() {
 
   const firstFields = [
     {
-      value: 'Chris Diorio',
+      value: 'Chris D',
       adornment: (
         <div className={classes.nameWrapper}>
           <NameAdornment color='#fff' />
@@ -56,7 +82,7 @@ export default function Confirmation() {
       ),
     },
     {
-      value: 'chris.diorio12@gmail.com',
+      value: 'example@var-x.com',
       adornment: (
         <div className={classes.emailWrapper}>
           <EmailAdornment color='#fff' />
@@ -114,10 +140,10 @@ export default function Confirmation() {
 
   const adornmentValue = (adornment, value) => (
     <>
-      <Grid item xs={1}>
+      <Grid item xs={2} classes={{ root: classes.adornmentWrapper }}>
         {adornment}
       </Grid>
-      <Grid item xs={11}>
+      <Grid item xs={10} classes={{ root: classes.centerText }}>
         <Typography variant='body1' classes={{ root: classes.text }}>
           {value}
         </Typography>
@@ -128,41 +154,70 @@ export default function Confirmation() {
   return (
     <Grid item container direction='column'>
       <Grid item container>
-        <Grid item container direction='column' xs={8}>
-          {firstFields.map(field => (
-            <Grid item container key={field.value}>
+        <Grid item container direction='column' xs={7}>
+          {firstFields.map((field, i) => (
+            <Grid
+              item
+              container
+              alignItems='center'
+              key={field.value}
+              classes={{
+                root: clsx(classes.fieldRow, {
+                  [classes.darkBackground]: i % 2 !== 0,
+                }),
+              }}
+            >
               {adornmentValue(field.adornment, field.value)}
             </Grid>
           ))}
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5} classes={{ root: classes.iconWrapper }}>
           <img src={confirmationIcon} alt='confirmation' />
         </Grid>
       </Grid>
       {secondFields.map((field, i) => (
-        <Grid item container key={i}>
-          <Grid item xs={6}>
+        <Grid
+          item
+          container
+          key={i}
+          alignItems='center'
+          classes={
+            (classes.fieldRow,
+            {
+              root: clsx({
+                [classes.darkBackground]: i % 2 !== 0,
+              }),
+            })
+          }
+        >
+          <Grid item container xs={7}>
             {field.promo ? (
-              <Fields
-                fields={field}
-                errors={promoError}
-                setErrors={setPromoError}
-                values={promo}
-                setValues={setPromo}
-                isWhite
-              />
+              <span className={classes.fieldWrapper}>
+                <Fields
+                  fields={field}
+                  errors={promoError}
+                  setErrors={setPromoError}
+                  values={promo}
+                  setValues={setPromo}
+                  isWhite
+                />
+              </span>
             ) : (
               adornmentValue(field.adornment, field.value)
             )}
           </Grid>
-          <Grid item container xs={6}>
+          <Grid item container xs={5}>
             <Grid item xs={6}>
               <Typography variant='h5' classes={{ root: classes.priceLabel }}>
                 {prices[i].label}
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant='body2'>{prices[i].value}</Typography>
+              <Typography
+                align='right'
+                variant='body2'
+                classes={{ root: classes.priceValue }}
+              >{`$${prices[i].value}`}</Typography>
             </Grid>
           </Grid>
         </Grid>

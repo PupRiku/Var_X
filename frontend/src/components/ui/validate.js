@@ -22,6 +22,7 @@ export default function validate(values) {
         val
       ),
     zip: val => /^\d{5}(-\d{4})?$/.test(val),
+    promo: val => true,
   };
 
   const valid = {};
