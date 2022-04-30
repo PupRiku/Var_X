@@ -8,6 +8,7 @@ import CheckoutNavigation from './CheckoutNavigation';
 import Details from '../settings/Details';
 import Locations from '../settings/Locations';
 import Shipping from './Shipping';
+import Payments from '../settings/Payments';
 
 const useStyles = makeStyles(theme => ({
   stepContainer: {
@@ -55,6 +56,10 @@ export default function CheckoutPortal({ user }) {
     { label: 'OVERNIGHT SHIPPING', price: 29.99 },
   ];
 
+  const [billingSlot, setBillingSlot] = useState(0);
+
+  const [saveCard, setSaveCard] = useState(false);
+
   const steps = [
     {
       title: 'Contact Info',
@@ -100,7 +105,19 @@ export default function CheckoutPortal({ user }) {
         />
       ),
     },
-    { title: 'Payment' },
+    {
+      title: 'Payment',
+      component: (
+        <Payments
+          user={user}
+          slot={billingSlot}
+          setSlot={setBillingSlot}
+          saveCard={saveCard}
+          setSaveCard={setSaveCard}
+          checkout
+        />
+      ),
+    },
     { title: 'Confirmation' },
     { title: `Thanks, ${user.username}!` },
   ];
