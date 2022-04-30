@@ -74,10 +74,23 @@ export default function CheckoutPortal({ user }) {
 
   const [saveCard, setSaveCard] = useState(false);
 
-  const errorHelper = values => {
+  const errorHelper = (values, forBilling, billingValues, slot) => {
     const valid = validate(values);
 
-    return Object.keys(valid).some(value => !valid[value]);
+    if (forBilling !== false && forBilling !== undefined) {
+      const billingValid = validate(billingValues);
+
+      if (forBilling === slot) {
+        return Object.keys(billingValid).some(value => !billingValid[value]);
+      } else {
+        return (
+          Object.keys(billingValid).some(value => !billingValid[value]) ||
+          Object.keys(valid).some(value => !valid[value])
+        );
+      }
+    } else {
+      return Object.keys(valid).some(value => !valid[value]);
+    }
   };
 
   let steps = [
@@ -99,7 +112,12 @@ export default function CheckoutPortal({ user }) {
           checkout
         />
       ),
-      error: errorHelper(detailValues),
+      error: errorHelper(
+        detailValues,
+        detailForBilling,
+        billingDetails,
+        detailSlot
+      ),
     },
     {
       title: 'Billing Info',
@@ -133,7 +151,12 @@ export default function CheckoutPortal({ user }) {
           checkout
         />
       ),
-      error: errorHelper(locationValues),
+      error: errorHelper(
+        locationValues,
+        locationForBilling,
+        billingLocation,
+        locationSlot
+      ),
     },
     {
       title: 'Billing Address',
