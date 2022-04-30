@@ -6,12 +6,22 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import CheckoutNavigation from './CheckoutNavigation';
 import Details from '../settings/Details';
+import Locations from '../settings/Locations';
 
 const useStyles = makeStyles(theme => ({
   stepContainer: {
     width: '40rem',
     height: '25rem',
     backgroundColor: theme.palette.primary.main,
+  },
+  '@global': {
+    '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
+      {
+        borderBottom: '2px solid #fff',
+      },
+    '.MuiInput-underline:after': {
+      borderBottom: `2px solid ${theme.palette.secondary.main}`,
+    },
   },
 }));
 
@@ -25,6 +35,16 @@ export default function CheckoutPortal({ user }) {
   });
   const [detailSlot, setDetailSlot] = useState(0);
   const [detailBilling, setDetailBilling] = useState(false);
+
+  const [locationValues, setLocationValues] = useState({
+    street: '',
+    zip: '',
+    city: '',
+    state: '',
+  });
+  const [locationSlot, setLocationSlot] = useState(0);
+  const [locationBilling, setLocationBilling] = useState(false);
+
   const [errors, setErrors] = useState({});
 
   const steps = [
@@ -45,7 +65,23 @@ export default function CheckoutPortal({ user }) {
         />
       ),
     },
-    { title: 'Address' },
+    {
+      title: 'Address',
+      component: (
+        <Locations
+          user={user}
+          values={locationValues}
+          setValues={setLocationValues}
+          slot={locationSlot}
+          setSlot={setLocationSlot}
+          errors={errors}
+          setErrors={setErrors}
+          billing={locationBilling}
+          setBilling={setLocationBilling}
+          checkout
+        />
+      ),
+    },
     { title: 'Shipping' },
     { title: 'Payment' },
     { title: 'Confirmation' },
