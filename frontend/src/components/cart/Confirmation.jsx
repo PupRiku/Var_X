@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Fields from '../auth/Fields';
+import { CartContext } from '../../contexts';
 
 import confirmationIcon from '../../images/tag.svg';
 import NameAdornment from '../../images/NameAdornment';
@@ -90,14 +91,37 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Confirmation() {
+export default function Confirmation({
+  detailValues,
+  billingDetails,
+  detailForBilling,
+  locationValues,
+  billingLocation,
+  locationForBilling,
+  shippingOptions,
+  selectedShipping,
+}) {
   const classes = useStyles();
+
+  const { cart } = useContext(CartContext);
+
   const [promo, setPromo] = useState({ promo: '' });
   const [promoError, setPromoError] = useState({});
 
+  const shipping = shippingOptions.find(
+    option => option.label === selectedShipping
+  );
+
+  const subtotal = cart.reduce(
+    (total, item) => total + item.variant.price * item.qty,
+    0
+  );
+
+  const tax = subtotal * 0.055;
+
   const firstFields = [
     {
-      value: 'Chris D',
+      value: detailValues.name,
       adornment: (
         <div className={classes.nameWrapper}>
           <NameAdornment color='#fff' />
@@ -105,7 +129,7 @@ export default function Confirmation() {
       ),
     },
     {
-      value: 'example@var-x.com',
+      value: detailValues.email,
       adornment: (
         <div className={classes.emailWrapper}>
           <EmailAdornment color='#fff' />
@@ -113,7 +137,7 @@ export default function Confirmation() {
       ),
     },
     {
-      value: '555-555-5555',
+      value: detailValues.phone,
       adornment: (
         <div className={classes.phoneWrapper}>
           <PhoneAdornment />
@@ -121,14 +145,14 @@ export default function Confirmation() {
       ),
     },
     {
-      value: '1234 Example Street',
+      value: locationValues.street,
       adornment: <img src={streetAdornment} alt='street' />,
     },
   ];
 
   const secondFields = [
     {
-      value: 'Madison, WI 53717',
+      value: `${locationValues.city}, ${locationValues.state} ${locationValues.zip}`,
       adornment: <img src={zipAdornment} alt='city, state, zip code' />,
     },
     {
@@ -149,17 +173,22 @@ export default function Confirmation() {
   const prices = [
     {
       label: 'SUBTOTAL',
-      value: 99.99,
+      value: subtotal.toFixed(2),
     },
     {
       label: 'SHIPPING',
-      value: 9.99,
+      value: shipping.price.toFixed(2),
     },
     {
       label: 'TAX',
-      value: 9.67,
+      value: tax.toFixed(2),
     },
   ];
+
+  const total = prices.reduce(
+    (total, item) => total + parseFloat(item.value),
+    0
+  );
 
   const adornmentValue = (adornment, value) => (
     <>
@@ -258,7 +287,7 @@ export default function Confirmation() {
             </Grid>
             <Grid item>
               <Chip
-                label='$149.99'
+                label={`$${total.toFixed(2)}`}
                 classes={{ root: classes.chipRoot, label: classes.chipLabel }}
               />
             </Grid>
