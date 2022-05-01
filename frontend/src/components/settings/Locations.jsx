@@ -105,7 +105,7 @@ export default function Locations({
   };
 
   useEffect(() => {
-    if (noSlots) return;
+    if (noSlots || user.username === 'Guest') return;
 
     setValues(user.locations[slot]);
   }, [slot]);
