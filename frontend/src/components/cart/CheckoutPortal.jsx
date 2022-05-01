@@ -10,6 +10,7 @@ import Locations from '../settings/Locations';
 import Shipping from './Shipping';
 import Payments from '../settings/Payments';
 import Confirmation from './Confirmation';
+import BillingConfirmation from './BillingConfirmation';
 
 import validate from '../ui/validate';
 
@@ -243,6 +244,16 @@ export default function CheckoutPortal({ user }) {
       >
         {steps[selectedStep].component}
       </Grid>
+      {steps[selectedStep].title === 'Confirmation' && (
+        <BillingConfirmation
+          detailForBilling={detailForBilling}
+          billingDetails={billingDetails}
+          detailSlot={detailSlot}
+          locationForBilling={locationForBilling}
+          billingLocation={billingLocation}
+          locationSlot={locationSlot}
+        />
+      )}
     </Grid>
   );
 }
