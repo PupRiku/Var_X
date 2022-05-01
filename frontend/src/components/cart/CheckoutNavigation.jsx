@@ -53,8 +53,10 @@ export default function CheckoutNavigation({
   selectedStep,
   setSelectedStep,
   details,
+  setDetails,
   detailSlot,
   location,
+  setLocation,
   locationSlot,
 }) {
   const classes = useStyles({ steps, selectedStep });
@@ -82,9 +84,9 @@ export default function CheckoutNavigation({
       .post(
         process.env.GATSBY_STRAPI_URL + '/users-permissions/set-settings',
         {
-          details: isDetails ? details : undefined,
+          details: isDetails && action !== 'delete' ? details : undefined,
           detailSlot: isDetails ? detailSlot : undefined,
-          location: isLocation ? location : undefined,
+          location: isLocation && action !== 'delete' ? location : undefined,
           locationSlot: isLocation ? locationSlot : undefined,
         },
         { headers: { Authorization: `Bearer ${user.jwt}` } }
@@ -94,12 +96,31 @@ export default function CheckoutNavigation({
         dispatchFeedback(
           setSnackbar({
             status: 'success',
-            message: 'Information Saved Successfully',
+            message: `Information ${
+              action === 'delete' ? 'Deleted' : 'Saved'
+            } Successfully`,
           })
         );
         dispatchUser(
           setUser({ ...response.data, jwt: user.jwt, onboarding: true })
         );
+
+        if (action === 'delete') {
+          if (isDetails) {
+            setDetails({
+              name: '',
+              email: '',
+              phone: '',
+            });
+          } else if (isLocation) {
+            setLocation({
+              street: '',
+              zip: '',
+              city: '',
+              state: '',
+            });
+          }
+        }
       })
       .catch(error => {
         setLoading(null);
@@ -107,8 +128,9 @@ export default function CheckoutNavigation({
         dispatchFeedback(
           setSnackbar({
             status: 'error',
-            message:
-              'There was a problem saving your information, please try again.',
+            message: `There was a problem ${
+              action === 'delete' ? 'deleting' : 'saving'
+            } your information, please try again.`,
           })
         );
       });
@@ -159,11 +181,15 @@ export default function CheckoutNavigation({
               )}
             </Grid>
             <Grid item>
-              <IconButton>
-                <span className={classes.delete}>
-                  <Delete color='#fff' />
-                </span>
-              </IconButton>
+              {loading === 'delete' ? (
+                <CircularProgress />
+              ) : (
+                <IconButton onClick={() => handleAction('delete')}>
+                  <span className={classes.delete}>
+                    <Delete color='#fff' />
+                  </span>
+                </IconButton>
+              )}
             </Grid>
           </Grid>
         </Grid>
