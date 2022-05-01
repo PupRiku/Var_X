@@ -2,14 +2,19 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
+import save from '../../images/save.svg';
+import Delete from '../../images/Delete';
 
 const useStyles = makeStyles(theme => ({
   navbar: {
     backgroundColor: theme.palette.secondary.main,
     width: '40rem',
     height: '5rem',
+    position: 'relative',
   },
   back: {
     visibility: ({ steps, selectedStep }) =>
@@ -23,6 +28,18 @@ const useStyles = makeStyles(theme => ({
   },
   disabled: {
     opacity: 0.5,
+  },
+  icon: {
+    height: '2.25rem',
+    width: '2.25rem',
+  },
+  actions: {
+    position: 'absolute',
+    right: 0,
+  },
+  delete: {
+    height: '2rem',
+    width: '2rem',
   },
 }));
 
@@ -54,15 +71,35 @@ export default function CheckoutNavigation({
           {steps[selectedStep].title.toUpperCase()}
         </Typography>
       </Grid>
-      <Button
-        onClick={() => setSelectedStep(selectedStep + 1)}
-        disabled={steps[selectedStep].error || selectedStep >= steps.length - 2}
-        classes={{ disabled: classes.disabled }}
-      >
-        <Grid item classes={{ root: classes.forward }}>
+      <Grid item classes={{ root: classes.forward }}>
+        <Button
+          onClick={() => setSelectedStep(selectedStep + 1)}
+          disabled={
+            steps[selectedStep].error || selectedStep >= steps.length - 2
+          }
+          classes={{ disabled: classes.disabled }}
+        >
           <Typography variant='h5'>{'>'}</Typography>
+        </Button>
+      </Grid>
+      {steps[selectedStep].hasActions ? (
+        <Grid item classes={{ root: classes.actions }}>
+          <Grid container>
+            <Grid item>
+              <IconButton>
+                <img src={save} alt='save' className={classes.icon} />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton>
+                <span className={classes.delete}>
+                  <Delete color='#fff' />
+                </span>
+              </IconButton>
+            </Grid>
+          </Grid>
         </Grid>
-      </Button>
+      ) : null}
     </Grid>
   );
 }
