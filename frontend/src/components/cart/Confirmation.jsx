@@ -1,10 +1,12 @@
 /* eslint-disable */
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Fields from '../auth/Fields';
@@ -92,6 +94,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Confirmation({
+  user,
   detailValues,
   billingDetails,
   detailForBilling,
@@ -102,6 +105,7 @@ export default function Confirmation({
   selectedShipping,
 }) {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
   const { cart } = useContext(CartContext);
 
@@ -203,6 +207,40 @@ export default function Confirmation({
     </>
   );
 
+  const handleOrder = () => {
+    setLoading(true);
+
+    axios
+      .post(
+        process.env.GATSBY_STRAPI_URL + '/orders/place',
+        {
+          shippingAddress: locationValues,
+          billingAddress: billingLocation,
+          shippingInfo: detailValues,
+          billingInfo: billingDetails,
+          shippingOption: shipping,
+          subtotal: subtotal.toFixed(2),
+          tax: tax.toFixed(2),
+          total: total.toFixed(2),
+          items: cart,
+        },
+        {
+          headers:
+            user.username === 'Guest'
+              ? undefined
+              : { Authorization: `Bearer ${user.jwt}` },
+        }
+      )
+      .then(response => {
+        setLoading(false);
+        console.log(response);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error(error);
+      });
+  };
+
   return (
     <Grid
       item
@@ -280,16 +318,20 @@ export default function Confirmation({
         </Grid>
       ))}
       <Grid item classes={{ root: classes.buttonWrapper }}>
-        <Button classes={{ root: classes.button }}>
+        <Button onClick={handleOrder} classes={{ root: classes.button }}>
           <Grid container justifyContent='space-around' alignItems='center'>
             <Grid item>
               <Typography variant='h5'>PLACE ORDER</Typography>
             </Grid>
             <Grid item>
-              <Chip
-                label={`$${total.toFixed(2)}`}
-                classes={{ root: classes.chipRoot, label: classes.chipLabel }}
-              />
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Chip
+                  label={`$${total.toFixed(2)}`}
+                  classes={{ root: classes.chipRoot, label: classes.chipLabel }}
+                />
+              )}
             </Grid>
           </Grid>
         </Button>
