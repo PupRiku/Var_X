@@ -58,6 +58,7 @@ export default function CheckoutNavigation({
   location,
   setLocation,
   locationSlot,
+  setErrors,
 }) {
   const classes = useStyles({ steps, selectedStep });
   const [loading, setLoading] = useState(null);
@@ -65,7 +66,7 @@ export default function CheckoutNavigation({
   const { user, dispatchUser } = useContext(UserContext);
 
   const handleAction = action => {
-    if (steps[selectedStep].error) {
+    if (steps[selectedStep].error && action !== 'delete') {
       dispatchFeedback(
         setSnackbar({
           status: 'error',
@@ -106,6 +107,7 @@ export default function CheckoutNavigation({
         );
 
         if (action === 'delete') {
+          setErrors({});
           if (isDetails) {
             setDetails({
               name: '',
