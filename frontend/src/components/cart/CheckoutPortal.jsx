@@ -11,6 +11,7 @@ import Shipping from './Shipping';
 import Payments from '../settings/Payments';
 import Confirmation from './Confirmation';
 import BillingConfirmation from './BillingConfirmation';
+import ThankYou from './ThankYou';
 
 import validate from '../ui/validate';
 
@@ -63,6 +64,8 @@ export default function CheckoutPortal({ user }) {
   const [locationForBilling, setLocationForBilling] = useState(false);
 
   const [errors, setErrors] = useState({});
+
+  const [order, setOrder] = useState(null);
 
   const [selectedShipping, setSelectedShipping] = useState(null);
   const shippingOptions = [
@@ -213,10 +216,16 @@ export default function CheckoutPortal({ user }) {
           locationForBilling={locationForBilling}
           shippingOptions={shippingOptions}
           selectedShipping={selectedShipping}
+          selectedStep={selectedStep}
+          setSelectedStep={setSelectedStep}
+          setOrder={setOrder}
         />
       ),
     },
-    { title: `Thanks, ${user.username}!` },
+    {
+      title: `Thanks, ${user.username.split(' ')[0]}!`,
+      component: <ThankYou selectedShipping={selectedShipping} order={order} />,
+    },
   ];
 
   if (detailForBilling !== false) {
