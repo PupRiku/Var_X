@@ -15,7 +15,7 @@ export default function CartItems() {
   const { cart } = useContext(CartContext);
 
   return (
-    <Grid item container xs={6} direction='column'>
+    <Grid item container lg={6} direction='column'>
       {cart.map(item => (
         <Item item={item} key={item.variant.id} />
       ))}

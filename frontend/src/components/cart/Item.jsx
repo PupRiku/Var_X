@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
@@ -26,11 +27,18 @@ const useStyles = makeStyles(theme => ({
   id: {
     color: theme.palette.secondary.main,
     fontSize: '1rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.75rem',
+    },
   },
   actionWrapper: {
     height: '3rem',
     width: '3rem',
     marginBottom: -8,
+    [theme.breakpoints.down('xs')]: {
+      height: '2rem',
+      width: '2rem',
+    },
   },
   infoContainer: {
     width: '35rem',
@@ -44,8 +52,14 @@ const useStyles = makeStyles(theme => ({
   },
   itemContainer: {
     margin: '2rem 0 2rem 2rem',
+    [theme.breakpoints.down('md')]: {
+      margin: '2rem 0',
+    },
   },
   actionButton: {
+    [theme.breakpoints.down('xs')]: {
+      padding: '12px 6px',
+    },
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -55,6 +69,8 @@ const useStyles = makeStyles(theme => ({
 export default function Item({ item }) {
   const classes = useStyles();
   const theme = useTheme();
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
   const { dispatchCart } = useContext(CartContext);
 
   const handleDelete = () => {
@@ -67,7 +83,7 @@ export default function Item({ item }) {
     {
       icon: DeleteIcon,
       color: theme.palette.error.main,
-      size: '2.5rem',
+      size: matchesXS ? '1.75rem' : '2.5rem',
       onClick: handleDelete,
     },
   ];
@@ -84,7 +100,7 @@ export default function Item({ item }) {
       <Grid
         item
         container
-        direction='column'
+        direction={matchesXS ? 'row' : 'column'}
         justifyContent='space-between'
         classes={{ root: classes.infoContainer }}
       >
@@ -113,12 +129,12 @@ export default function Item({ item }) {
           justifyContent='space-between'
           alignItems='flex-end'
         >
-          <Grid item xs>
+          <Grid item xs={7} sm>
             <Typography variant='body1' classes={{ root: classes.id }}>
               ID: {item.variant.id}
             </Typography>
           </Grid>
-          <Grid item container justifyContent='flex-end' xs>
+          <Grid item container justifyContent='flex-end' xs={5} sm>
             {actions.map((action, i) => (
               <Grid item key={i}>
                 <IconButton

@@ -241,7 +241,7 @@ export default function CheckoutPortal({ user }) {
   }, [detailSlot, locationSlot, selectedStep]);
 
   return (
-    <Grid item container direction='column' xs={6} alignItems='flex-end'>
+    <Grid item container direction='column' lg={6} alignItems='flex-end'>
       <CheckoutNavigation
         steps={steps}
         selectedStep={selectedStep}
