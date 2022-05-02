@@ -71,6 +71,7 @@ export default function Payments({
   setSlot,
   saveCard,
   setSaveCard,
+  setCardError,
   checkout,
 }) {
   const classes = useStyles({ checkout });
@@ -90,9 +91,9 @@ export default function Payments({
 
   const handleCardChange = async event => {
     if (event.complete) {
-      console.log('VALID');
+      setCardError(false);
     } else {
-      console.log('INVALID');
+      setCardError(true);
     }
   };
 
@@ -103,7 +104,7 @@ export default function Payments({
           style: {
             base: {
               fontSize: '20px',
-              fontFamily: 'Montserrat, sans-serif',
+              fontFamily: 'Montserrat',
               color: '#fff',
               iconColor: '#fff',
               '::placeholder': {

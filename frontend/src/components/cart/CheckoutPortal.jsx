@@ -93,6 +93,8 @@ export default function CheckoutPortal({ user }) {
 
   const [saveCard, setSaveCard] = useState(false);
 
+  const [cardError, setCardError] = useState(true);
+
   const errorHelper = (values, forBilling, billingValues, slot) => {
     const valid = validate(values);
 
@@ -213,10 +215,11 @@ export default function CheckoutPortal({ user }) {
           setSlot={setBillingSlot}
           saveCard={saveCard}
           setSaveCard={setSaveCard}
+          setCardError={setCardError}
           checkout
         />
       ),
-      error: false,
+      error: cardError,
     },
     {
       title: 'Confirmation',
