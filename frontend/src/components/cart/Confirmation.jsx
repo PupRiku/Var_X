@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
@@ -9,6 +9,7 @@ import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
+import { v4 as uuidv4 } from 'uuid';
 
 import Fields from '../auth/Fields';
 import { CartContext } from '../../contexts';
@@ -120,6 +121,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Confirmation({
   user,
+  order,
   detailValues,
   billingDetails,
   detailForBilling,
@@ -136,6 +138,7 @@ export default function Confirmation({
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState(null);
 
   const { cart, dispatchCart } = useContext(CartContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
@@ -304,6 +307,35 @@ export default function Confirmation({
         }
       });
   };
+
+  useEffect(() => {
+    if (!order && cart.length !== 0) {
+      const storedIntent = localStorage.getItem('intentID');
+      const idempotencyKey = uuidv4();
+
+      setClientSecret(null);
+
+      axios
+        .post(
+          process.env.GATSBY_STRAPI_URL + '/orders/process',
+          {
+            items: cart,
+            total: total.toFixed(2),
+            shippingOption: shipping,
+            idempotencyKey,
+            storedIntent,
+            email: detailValues.email,
+          },
+          {
+            headers: user.jwt
+              ? { Authorization: `Bearer ${user.jwt}` }
+              : undefined,
+          }
+        )
+        .then()
+        .catch();
+    }
+  }, [cart]);
 
   return (
     <Grid

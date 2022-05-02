@@ -226,6 +226,7 @@ export default function CheckoutPortal({ user }) {
       component: (
         <Confirmation
           user={user}
+          order={order}
           detailValues={detailValues}
           billingDetails={billingDetails}
           detailForBilling={detailForBilling}
