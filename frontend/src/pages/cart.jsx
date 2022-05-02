@@ -35,7 +35,7 @@ export default function Cart() {
         </Grid>
         <Grid item container>
           <CartItems />
-          {/* <CheckoutPortal user={user} /> */}
+          <CheckoutPortal user={user} />
         </Grid>
       </Grid>
     </Layout>

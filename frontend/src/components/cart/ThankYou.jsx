@@ -3,6 +3,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link } from 'gatsby';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -15,11 +16,17 @@ const useStyles = makeStyles(theme => ({
   },
   order: {
     fontWeight: 600,
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
   },
   shopText: {
     fontSize: '2rem',
     fontWeight: 600,
     textTransform: 'none',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.5rem',
+    },
   },
   container: {
     height: '100%',
@@ -33,10 +40,16 @@ const useStyles = makeStyles(theme => ({
   icon: {
     marginTop: '-3rem',
   },
+  detailsText: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
+    },
+  },
 }));
 
 export default function ThankYou({ selectedShipping, order }) {
   const classes = useStyles();
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const addToDate = days => {
     var date = new Date();
@@ -74,8 +87,15 @@ export default function ThankYou({ selectedShipping, order }) {
         <img src={complete} alt='order placed' className={classes.icon} />
       </Grid>
       <Grid item>
-        <Typography variant='h4'>Expected by {getExpected()}</Typography>
-        <Grid item container justifyContent='space-between' alignItems='center'>
+        <Typography variant='h4' align='center'>
+          Expected by {getExpected()}
+        </Typography>
+        <Grid
+          item
+          container
+          justifyContent={matchesXS ? 'space-around' : 'space-between'}
+          alignItems='center'
+        >
           <Grid item>
             <Typography variant='body2' classes={{ root: classes.order }}>
               Order #{order.id.slice(order.id.length - 10, order.id.length)}
@@ -83,7 +103,12 @@ export default function ThankYou({ selectedShipping, order }) {
           </Grid>
           <Grid item>
             <Button classes={{ root: classes.detailsButton }}>
-              <Typography variant='body2'>Details {'>'}</Typography>
+              <Typography
+                variant='body2'
+                classes={{ root: classes.detailsText }}
+              >
+                Details {'>'}
+              </Typography>
             </Button>
           </Grid>
         </Grid>

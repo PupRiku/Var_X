@@ -52,10 +52,18 @@ export default function BillingConfirmation({
       {fields.map(field =>
         field.hidden ? null : (
           <Grid item key={field.title} classes={{ root: classes.wrapper }}>
-            <Typography variant='h4' classes={{ root: classes.heading }}>
+            <Typography
+              variant='h4'
+              classes={{ root: classes.heading }}
+              align='right'
+            >
               {field.title}
             </Typography>
-            <Typography variant='h3' classes={{ root: classes.values }}>
+            <Typography
+              variant='h3'
+              classes={{ root: classes.values }}
+              align='right'
+            >
               {Object.keys(field.values).map(value => (
                 <span key={value}>
                   {field.values[value]}

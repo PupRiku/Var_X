@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Fields from '../auth/Fields';
@@ -32,6 +33,9 @@ const useStyles = makeStyles(theme => ({
   text: {
     fontSize: '1rem',
     color: '#fff',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.85rem',
+    },
   },
   emailWrapper: {
     height: 17,
@@ -47,6 +51,9 @@ const useStyles = makeStyles(theme => ({
   },
   priceLabel: {
     fontSize: '1.5rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.85rem',
+    },
   },
   darkBackground: {
     backgroundColor: theme.palette.secondary.main,
@@ -69,9 +76,16 @@ const useStyles = makeStyles(theme => ({
   },
   priceValue: {
     marginRight: '1rem',
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '0.85rem',
+      marginRight: '0.5rem',
+    },
   },
   fieldWrapper: {
     marginLeft: '1.25rem',
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '0.25rem',
+    },
   },
   button: {
     width: '100%',
@@ -119,6 +133,8 @@ export default function Confirmation({
   setOrder,
 }) {
   const classes = useStyles();
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
+
   const [loading, setLoading] = useState(false);
 
   const { cart, dispatchCart } = useContext(CartContext);
@@ -214,8 +230,8 @@ export default function Confirmation({
       <Grid item xs={2} classes={{ root: classes.adornmentWrapper }}>
         {adornment}
       </Grid>
-      <Grid item xs={10} classes={{ root: classes.centerText }}>
-        <Typography variant='body1' classes={{ root: classes.text }}>
+      <Grid item xs={10} classes={{ root: classes.centerText }} zeroMinWidth>
+        <Typography variant='body1' classes={{ root: classes.text }} noWrap>
           {value}
         </Typography>
       </Grid>
@@ -324,14 +340,11 @@ export default function Confirmation({
           container
           key={i}
           alignItems='center'
-          classes={
-            (classes.fieldRow,
-            {
-              root: clsx({
-                [classes.darkBackground]: i % 2 !== 0,
-              }),
-            })
-          }
+          classes={{
+            root: clsx(classes.fieldRow, {
+              [classes.darkBackground]: i % 2 !== 0,
+            }),
+          }}
         >
           <Grid item container xs={7}>
             {field.promo ? (
@@ -343,6 +356,7 @@ export default function Confirmation({
                   values={promo}
                   setValues={setPromo}
                   isWhite
+                  xs={matchesXS}
                 />
               </span>
             ) : (
