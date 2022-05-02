@@ -59,6 +59,9 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '75%',
+    borderBottom: '2px solid #fff',
+    height: '2rem',
+    marginTop: '-1rem',
   },
 }));
 
@@ -95,7 +98,22 @@ export default function Payments({
 
   const cardWrapper = (
     <form onSubmit={handleSubmit} className={classes.form}>
-      <CardElement onChange={handleCardChange} />
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: '20px',
+              fontFamily: 'Montserrat, sans-serif',
+              color: '#fff',
+              iconColor: '#fff',
+              '::placeholder': {
+                color: '#fff',
+              },
+            },
+          },
+        }}
+        onChange={handleCardChange}
+      />
     </form>
   );
 
