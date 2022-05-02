@@ -130,6 +130,7 @@ export default function CheckoutPortal({ user }) {
           setBilling={setDetailForBilling}
           billingValues={billingDetails}
           setBillingValues={setBillingDetails}
+          selectedStep={selectedStep}
           checkout
         />
       ),
@@ -149,6 +150,7 @@ export default function CheckoutPortal({ user }) {
           setValues={setBillingDetails}
           errors={errors}
           setErrors={setErrors}
+          selectedStep={selectedStep}
           checkout
           noSlots
         />
@@ -170,6 +172,7 @@ export default function CheckoutPortal({ user }) {
           setBilling={setLocationForBilling}
           billingValues={billingLocation}
           setBillingValues={setBillingLocation}
+          selectedStep={selectedStep}
           checkout
         />
       ),
@@ -189,6 +192,7 @@ export default function CheckoutPortal({ user }) {
           setValues={setBillingLocation}
           errors={errors}
           setErrors={setErrors}
+          selectedStep={selectedStep}
           checkout
           noSlots
         />
@@ -202,6 +206,7 @@ export default function CheckoutPortal({ user }) {
           shippingOptions={shippingOptions}
           selectedShipping={selectedShipping}
           setSelectedShipping={setSelectedShipping}
+          selectedStep={selectedStep}
         />
       ),
       error: selectedShipping === null,
@@ -216,6 +221,7 @@ export default function CheckoutPortal({ user }) {
           saveCard={saveCard}
           setSaveCard={setSaveCard}
           setCardError={setCardError}
+          selectedStep={selectedStep}
           checkout
         />
       ),
@@ -243,7 +249,13 @@ export default function CheckoutPortal({ user }) {
     },
     {
       title: `Thanks, ${user.username.split(' ')[0]}!`,
-      component: <ThankYou selectedShipping={selectedShipping} order={order} />,
+      component: (
+        <ThankYou
+          selectedShipping={selectedShipping}
+          order={order}
+          selectedStep={selectedStep}
+        />
+      ),
     },
   ];
 
@@ -288,7 +300,12 @@ export default function CheckoutPortal({ user }) {
         classes={{ root: classes.stepContainer }}
       >
         <Elements stripe={stripePromise}>
-          {steps[selectedStep].component}
+          {steps.map((step, i) =>
+            React.cloneElement(step.component, {
+              stepNumber: i,
+              key: i,
+            })
+          )}
         </Elements>
       </Grid>
       {steps[selectedStep].title === 'Confirmation' && (

@@ -55,6 +55,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/finalize",
+      "handler": "order.finalize",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
