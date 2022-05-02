@@ -277,34 +277,6 @@ export default function Confirmation({
       .catch(error => {
         setLoading(false);
         console.error(error);
-
-        switch (error.response.status) {
-          case 400:
-            dispatchFeedback(
-              setSnackbar({ status: 'error', message: 'Invalid Cart' })
-            );
-            break;
-          case 409:
-            dispatchFeedback(
-              setSnackbar({
-                status: 'error',
-                message:
-                  `The following items are not available at the requested quantity. Please update your cart and try again.\n` +
-                  `${error.response.data.unavailable.map(
-                    item => `\nItem: ${item.id}, Available: ${item.qty}`
-                  )}`,
-              })
-            );
-            break;
-          default:
-            dispatchFeedback(
-              setSnackbar({
-                status: 'error',
-                message:
-                  'Something went wrong, please refresh the page and try again. You have NOT been charged.',
-              })
-            );
-        }
       });
   };
 
@@ -332,8 +304,41 @@ export default function Confirmation({
               : undefined,
           }
         )
-        .then()
-        .catch();
+        .then(response => {
+          setClientSecret(response.data.client_secret);
+          localStorage.setItem('intentID', response.data.intentID);
+        })
+        .catch(error => {
+          console.error(error);
+
+          switch (error.response.status) {
+            case 400:
+              dispatchFeedback(
+                setSnackbar({ status: 'error', message: 'Invalid Cart' })
+              );
+              break;
+            case 409:
+              dispatchFeedback(
+                setSnackbar({
+                  status: 'error',
+                  message:
+                    `The following items are not available at the requested quantity. Please update your cart and try again.\n` +
+                    `${error.response.data.unavailable.map(
+                      item => `\nItem: ${item.id}, Available: ${item.qty}`
+                    )}`,
+                })
+              );
+              break;
+            default:
+              dispatchFeedback(
+                setSnackbar({
+                  status: 'error',
+                  message:
+                    'Something went wrong, please refresh the page and try again. You have NOT been charged.',
+                })
+              );
+          }
+        });
     }
   }, [cart]);
 
@@ -414,7 +419,7 @@ export default function Confirmation({
       <Grid item classes={{ root: classes.buttonWrapper }}>
         <Button
           onClick={handleOrder}
-          disabled={cart.length === 0 || loading}
+          disabled={cart.length === 0 || loading || !clientSecret}
           classes={{ root: classes.button, disabled: classes.disabled }}
         >
           <Grid container justifyContent='space-around' alignItems='center'>

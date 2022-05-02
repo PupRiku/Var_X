@@ -50,8 +50,8 @@
     },
     {
       "method": "POST",
-      "path": "/orders/place",
-      "handler": "order.place",
+      "path": "/orders/process",
+      "handler": "order.process",
       "config": {
         "policies": []
       }
