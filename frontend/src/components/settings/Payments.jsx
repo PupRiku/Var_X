@@ -6,6 +6,7 @@ import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import Slots from './Slots';
 
@@ -56,6 +57,9 @@ const useStyles = makeStyles(theme => ({
     color: '#fff',
     fontWeight: 600,
   },
+  form: {
+    width: '75%',
+  },
 }));
 
 export default function Payments({
@@ -67,11 +71,33 @@ export default function Payments({
   checkout,
 }) {
   const classes = useStyles({ checkout });
+  const stripe = useStripe();
+  const elements = useElements();
 
   const card =
     user.username === 'Guest'
       ? { last4: '', brand: '' }
       : user.paymentMethods[slot];
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+    if (!stripe || !elements) return;
+  };
+
+  const handleCardChange = async event => {
+    if (event.complete) {
+      console.log('VALID');
+    } else {
+      console.log('INVALID');
+    }
+  };
+
+  const cardWrapper = (
+    <form onSubmit={handleSubmit} className={classes.form}>
+      <CardElement onChange={handleCardChange} />
+    </form>
+  );
 
   return (
     <Grid
@@ -88,6 +114,7 @@ export default function Payments({
         <img src={cardIcon} alt='payment settings' className={classes.icon} />
       </Grid>
       <Grid item container justifyContent='center'>
+        {checkout && !card.last4 ? cardWrapper : null}
         <Grid item>
           <Typography
             align='center'
@@ -96,6 +123,8 @@ export default function Payments({
           >
             {card.last4
               ? `${card[0].brand.toUpperCase()} **** **** **** ${card[0].last4}`
+              : checkout
+              ? null
               : 'Add A New Card During Checkout'}
           </Typography>
         </Grid>
