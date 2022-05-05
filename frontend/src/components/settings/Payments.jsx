@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -131,6 +131,18 @@ export default function Payments({
       />
     </form>
   );
+
+  useEffect(() => {
+    if (!checkout || !user.jwt) return;
+
+    if (user.paymentMethods[slot].last4 !== '') {
+      setCard(user.paymentMethods[slot]);
+      setCardError(false);
+    } else {
+      setCard({ brand: '', last4: '' });
+      setCardError(true);
+    }
+  }, [slot]);
 
   return (
     <Grid
