@@ -13,10 +13,9 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { v4 as uuidv4 } from 'uuid';
 
 import Fields from '../auth/Fields';
-import { CartContext } from '../../contexts';
 
-import { FeedbackContext } from '../../contexts';
-import { setSnackbar, clearCart } from '../../contexts/actions';
+import { CartContext, FeedbackContext, UserContext } from '../../contexts';
+import { setSnackbar, clearCart, setUser } from '../../contexts/actions';
 
 import confirmationIcon from '../../images/tag.svg';
 import NameAdornment from '../../images/NameAdornment';
@@ -125,6 +124,9 @@ const useStyles = makeStyles(theme => ({
 export default function Confirmation({
   user,
   order,
+  card,
+  cardSlot,
+  saveCard,
   detailValues,
   billingDetails,
   detailForBilling,
@@ -148,6 +150,7 @@ export default function Confirmation({
 
   const { cart, dispatchCart } = useContext(CartContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
+  const { dispatchUser } = useContext(UserContext);
 
   const [promo, setPromo] = useState({ promo: '' });
   const [promoError, setPromoError] = useState({});
@@ -200,7 +203,7 @@ export default function Confirmation({
       adornment: <img src={zipAdornment} alt='city, state, zip code' />,
     },
     {
-      value: '**** **** **** 1234',
+      value: `${card.brand.toUpperCase()} ${card.last4}`,
       adornment: (
         <img src={cardAdornment} alt='credit card' className={classes.card} />
       ),
@@ -270,6 +273,7 @@ export default function Confirmation({
             phone: billingDetails.phone,
           },
         },
+        setup_future_usage: saveCard ? 'off_session' : undefined,
       },
       { idempotencyKey }
     );
@@ -297,6 +301,9 @@ export default function Confirmation({
             total: total.toFixed(2),
             items: cart,
             transaction: result.paymentIntent.id,
+            paymentMethod: card,
+            saveCard,
+            cardSlot,
           },
           {
             headers:
@@ -306,11 +313,18 @@ export default function Confirmation({
           }
         )
         .then(response => {
+          if (saveCard) {
+            let newUser = { ...user };
+            newUser.paymentMethods[cardSlot] = card;
+            dispatchUser(setUser(newUser));
+          }
+
           setLoading(false);
           dispatchCart(clearCart());
-          localStorage.removeItem('intentID');
 
+          localStorage.removeItem('intentID');
           setClientSecret(null);
+
           setOrder(response.data.order);
           setSelectedStep(selectedStep + 1);
         })

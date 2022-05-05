@@ -89,10 +89,10 @@ export default function CheckoutPortal({ user }) {
     { label: 'OVERNIGHT SHIPPING', price: 29.99 },
   ];
 
-  const [billingSlot, setBillingSlot] = useState(0);
+  const [cardSlot, setCardSlot] = useState(0);
 
+  const [card, setCard] = useState({ brand: '', last4: '' });
   const [saveCard, setSaveCard] = useState(false);
-
   const [cardError, setCardError] = useState(true);
 
   const errorHelper = (values, forBilling, billingValues, slot) => {
@@ -215,9 +215,10 @@ export default function CheckoutPortal({ user }) {
       title: 'Payment',
       component: (
         <Payments
+          setCard={setCard}
           user={user}
-          slot={billingSlot}
-          setSlot={setBillingSlot}
+          slot={cardSlot}
+          setSlot={setCardSlot}
           saveCard={saveCard}
           setSaveCard={setSaveCard}
           setCardError={setCardError}
@@ -233,6 +234,9 @@ export default function CheckoutPortal({ user }) {
         <Confirmation
           user={user}
           order={order}
+          card={card}
+          cardSlot={cardSlot}
+          saveCard={saveCard}
           detailValues={detailValues}
           billingDetails={billingDetails}
           detailForBilling={detailForBilling}

@@ -68,6 +68,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Payments({
+  setCard,
   user,
   slot,
   setSlot,
@@ -95,6 +96,15 @@ export default function Payments({
 
   const handleCardChange = async event => {
     if (event.complete) {
+      const cardElement = elements.getElement(CardElement);
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+      });
+      setCard({
+        brand: paymentMethod.card.brand,
+        last4: paymentMethod.card.last4,
+      });
       setCardError(false);
     } else {
       setCardError(true);
@@ -145,7 +155,7 @@ export default function Payments({
             classes={{ root: classes.number }}
           >
             {card.last4
-              ? `${card[0].brand.toUpperCase()} **** **** **** ${card[0].last4}`
+              ? `${card.brand.toUpperCase()} **** **** **** ${card.last4}`
               : checkout
               ? null
               : 'Add A New Card During Checkout'}
@@ -171,7 +181,7 @@ export default function Payments({
         classes={{ root: classes.slotContainer }}
       >
         <Slots slot={slot} setSlot={setSlot} noLabel />
-        {checkout && (
+        {checkout && user.username !== 'Guest' && (
           <Grid item>
             <FormControlLabel
               classes={{
