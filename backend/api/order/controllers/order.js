@@ -5,6 +5,7 @@
  * to customize this controller
  */
 const { sanitizeEntity } = require('strapi-utils');
+const { getContentTypeRoutePrefix } = require('strapi-utils/lib/content-types');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 const GUEST_ID = '626ecfc6d20004618c908d7b';
@@ -210,5 +211,17 @@ module.exports = {
     );
 
     ctx.send({ user: sanitizeUser(newUser) }, 200);
+  },
+
+  async history(ctx) {
+    const orders = await strapi.services.order.find({
+      user: ctx.state.user.id,
+    });
+
+    const cleanOrders = orders.map(order =>
+      sanitizeEntity(order, { model: strapi.models.order })
+    );
+
+    ctx.send({ orders: cleanOrders }, 200);
   },
 };
