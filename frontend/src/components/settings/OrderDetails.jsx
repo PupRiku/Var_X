@@ -39,6 +39,9 @@ const useStyles = makeStyles(theme => ({
   chipRoot: {
     backgroundColor: theme.palette.primary.main,
   },
+  prices: {
+    padding: '0.25rem 1rem',
+  },
 }));
 
 export default function OrderDetails({ orders, open, setOpen }) {
@@ -47,6 +50,20 @@ export default function OrderDetails({ orders, open, setOpen }) {
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const order = orders.find(order => order.id === open);
+
+  const prices = [
+    { label: 'Subtotal', value: order?.subtotal },
+    { label: 'Shipping', value: order?.shippingOption.price },
+    { label: 'Tax', value: order?.tax },
+    { label: 'Total', value: order?.total },
+    {
+      label: 'Payment',
+      string: `${order?.paymentMethod.brand.toUpperCase()} ${
+        order?.paymentMethod.last4
+      }`,
+    },
+    { label: 'Transaction', string: order?.transaction },
+  ];
 
   return (
     <SwipeableDrawer
@@ -118,6 +135,31 @@ export default function OrderDetails({ orders, open, setOpen }) {
             {order?.shippingAddress.zip}
           </Typography>
         </Grid>
+        {prices.map(price => (
+          <Grid
+            key={price.label}
+            item
+            container
+            justifyContent='space-between'
+            classes={{ root: classes.prices }}
+          >
+            <Grid item>
+              <Typography variant='body2' classes={{ root: classes.bold }}>
+                {price.label}
+              </Typography>
+            </Grid>
+            <Grid item>
+              {price.string ? (
+                <Typography variant='body2'>{price.string}</Typography>
+              ) : (
+                <Chip
+                  label={`$${price.value.toFixed(2)}`}
+                  classes={{ label: classes.bold }}
+                />
+              )}
+            </Grid>
+          </Grid>
+        ))}
       </Grid>
     </SwipeableDrawer>
   );
