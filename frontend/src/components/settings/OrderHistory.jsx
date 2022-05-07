@@ -3,11 +3,31 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { UserContext } from '../../contexts';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(theme => ({
+  item: {
+    height: '100%',
+    width: '100%',
+  },
+  '@global': {
+    '.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle': {
+      fontWeight: 600,
+    },
+    '.MuiDataGrid-root .MuiDataGrid-columnSeparator': {
+      display: 'none',
+    },
+    '.MuiDataGrid-root .MuiDataGrid-columnHeaderTitleContainer': {
+      'justify-content': 'center',
+    },
+    '.MuiDataGrid-root .MuiDataGrid-columnHeader--moving': {
+      'background-color': 'transparent',
+    },
+  },
+}));
 
 export default function OrderHistory() {
   const classes = useStyles();
@@ -27,5 +47,20 @@ export default function OrderHistory() {
       });
   }, []);
 
-  return null;
+  const columns = [
+    { field: 'shipping', headerName: 'Shipping', flex: 1, sortable: false },
+    { field: 'order', headerName: 'Order', flex: 1 },
+    { field: 'status', headerName: 'Status', flex: 1 },
+    { field: 'date', headerName: 'Date', flex: 1, type: 'date' },
+    { field: 'total', headerName: 'Total', flex: 1 },
+    { field: '', flex: 1.5, sortable: false },
+  ];
+
+  const rows = [];
+
+  return (
+    <Grid item classes={{ root: classes.item }}>
+      <DataGrid rows={rows} columns={columns} pageSize={5} />
+    </Grid>
+  );
 }
