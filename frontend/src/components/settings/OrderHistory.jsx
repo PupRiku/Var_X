@@ -178,7 +178,7 @@ export default function OrderHistory({ setSelectedSetting }) {
         pageSize={5}
         classes={{ root: classes.render }}
       />
-      <OrderDetails open={open} setOpen={setOpen} />
+      <OrderDetails orders={orders} open={open} setOpen={setOpen} />
     </Grid>
   );
 }
