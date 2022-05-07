@@ -4,8 +4,11 @@ import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
+
+import BackwardsIcon from '../../images/BackwardsOutline';
 
 import { UserContext } from '../../contexts';
 
@@ -17,10 +20,19 @@ const useStyles = makeStyles(theme => ({
   chipLabel: {
     fontWeight: 600,
   },
+  header: {
+    height: '8rem',
+    width: '100%',
+    backgroundColor: theme.palette.secondary.main,
+  },
+  icon: {
+    height: '4rem',
+    width: '4rem',
+  },
   '@global': {
     //Column Headers
     '.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle': {
-      'font-weight': 600,
+      fontWeight: 600,
     },
     //Column Separators
     '.MuiDataGrid-root .MuiDataGrid-columnSeparator': {
@@ -28,35 +40,36 @@ const useStyles = makeStyles(theme => ({
     },
     //Column Headers Container
     '.MuiDataGrid-root .MuiDataGrid-columnHeaderTitleContainer': {
-      'justify-content': 'center',
+      justifyContent: 'center',
     },
     //Column Blank Header
     '.MuiDataGrid-root .MuiDataGrid-columnHeader--moving': {
-      'background-color': 'transparent',
+      backgroundColor: 'transparent',
     },
     //Row Cell
     '.MuiDataGrid-root .MuiDataGrid-cell': {
-      'white-space': 'pre-wrap',
-      'max-height': '100% !important',
-      'line-height': 'initial !important',
+      whiteSpace: 'pre-wrap',
+      maxHeight: '100% !important',
+      lineHeight: 'initial !important',
       padding: '1rem',
-      'padding-right': 'calc(1rem + 26px)',
+      paddingRight: 'calc(1rem + 26px)',
       display: 'flex',
-      'justify-content': 'center',
-      'align-items': 'center',
-      'font-weight': 600,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontWeight: 600,
+      borderBottom: '2px solid #fff',
     },
     // Row
     '.MuiDataGrid-root .MuiDataGrid-row': {
-      'max-height': '100% !important',
+      maxHeight: '100% !important',
     },
     // Data Render Zone
     '.MuiDataGrid-renderingZone': {
-      'max-height': '100% !important',
+      maxHeight: '100% !important',
     },
     // Pagination
     '.MuiDataGrid-root .MuiDataGrid-footerContainer': {
-      'margin-top': '-10rem',
+      marginTop: '-11rem',
     },
     // Pagination Text
     '.MuiTablePagination-caption': {
@@ -66,10 +79,19 @@ const useStyles = makeStyles(theme => ({
     '.MuiSvgIcon-root': {
       fill: '#fff',
     },
+    // Collumn Header Row
+    '.MuiDataGrid-root .MuiDataGrid-columnsContainer': {
+      backgroundColor: theme.palette.secondary.main,
+      border: 'none',
+    },
+    // Entire Data Grid
+    '.MuiDataGrid-root': {
+      border: 'none',
+    },
   },
 }));
 
-export default function OrderHistory() {
+export default function OrderHistory({ setSelectedSetting }) {
   const classes = useStyles();
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext);
@@ -127,7 +149,14 @@ export default function OrderHistory() {
   const rows = createData(orders);
 
   return (
-    <Grid item classes={{ root: classes.item }}>
+    <Grid item container classes={{ root: classes.item }}>
+      <Grid item classes={{ root: classes.header }}>
+        <IconButton onClick={() => setSelectedSetting(null)}>
+          <div className={classes.icon}>
+            <BackwardsIcon color='#fff' />
+          </div>
+        </IconButton>
+      </Grid>
       <DataGrid
         rows={rows}
         columns={columns}
