@@ -92,12 +92,14 @@ export default function OrderDetails({ orders, open, setOpen }) {
       disableDiscovery={iOS}
       elevation={0}
     >
-      <Grid
-        item
-        component={Button}
-        onClick={() => setOpen(null)}
-        classes={{ root: classes.spacer }}
-      />
+      {matchesXS ? (
+        <Grid
+          item
+          component={Button}
+          onClick={() => setOpen(null)}
+          classes={{ root: classes.spacer }}
+        />
+      ) : null}
       <Grid container direction='column' classes={{ root: classes.light }}>
         <Grid item classes={{ root: classes.dark }}>
           <Typography variant='h2' classes={{ root: classes.id }}>
