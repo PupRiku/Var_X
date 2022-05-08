@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   selected: {
     height: '40rem',
     width: '40rem',
@@ -49,17 +49,15 @@ export default function ProductImages({
       </Grid>
       <Grid item container justifyContent='center'>
         {images.map((image, i) => (
-          <>
-            <Grid item key={image.url} classes={{ root: classes.imageItem }}>
-              <IconButton onClick={() => setSelectedImage(i)}>
-                <img
-                  src={process.env.GATSBY_STRAPI_URL + image.url}
-                  alt={`product_small${i}`}
-                  className={classes.small}
-                />
-              </IconButton>
-            </Grid>
-          </>
+          <Grid item key={image.url} classes={{ root: classes.imageItem }}>
+            <IconButton onClick={() => setSelectedImage(i)}>
+              <img
+                src={process.env.GATSBY_STRAPI_URL + image.url}
+                alt={`product_small${i}`}
+                className={classes.small}
+              />
+            </IconButton>
+          </Grid>
         ))}
       </Grid>
     </Grid>
