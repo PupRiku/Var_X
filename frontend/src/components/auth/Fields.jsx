@@ -36,6 +36,7 @@ export default function Fields({
   fullWidth,
   settings,
   xs,
+  noError,
 }) {
   const classes = useStyles({ isWhite, fullWidth, settings, xs });
 
@@ -50,28 +51,31 @@ export default function Fields({
           value={values[field]}
           onChange={e => {
             const valid = validateHelper(e);
-            if (errors[field] || valid[field] === true) {
+
+            if (!noError && (errors[field] || valid[field] === true)) {
               setErrors({ ...errors, [field]: !valid[field] });
             }
+
             setValues({ ...values, [field]: e.target.value });
           }}
           onBlur={e => {
+            if (noError) return;
             const valid = validateHelper(e);
             setErrors({ ...errors, [field]: !valid[field] });
           }}
-          error={errors[field]}
-          helperText={errors[field] && fields[field].helperText}
+          error={noError ? false : errors[field]}
+          helperText={noError ? '' : errors[field] && fields[field].helperText}
           classes={{ root: classes.textField }}
           placeholder={fields[field].placeholder}
           type={fields[field].type}
           disabled={disabled}
           fullWidth={fullWidth}
           InputProps={{
-            startAdornment: (
+            startAdornment: fields[field].startAdornment ? (
               <InputAdornment position='start'>
                 {fields[field].startAdornment}
               </InputAdornment>
-            ),
+            ) : undefined,
             endAdornment: fields[field].endAdornment ? (
               <InputAdornment position='end'>
                 {fields[field].endAdornment}

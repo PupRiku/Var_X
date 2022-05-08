@@ -8,6 +8,7 @@ import Layout from '../components/ui/layout';
 import ProductImages from '../components/product-detail/ProductImages';
 import ProductInfo from '../components/product-detail/ProductInfo';
 import RecentlyViewed from '../components/product-detail/RecentlyViewed';
+import ProductReviews from '../components/product-detail/ProductReviews';
 
 import { GET_DETAILS } from '../apollo/queries';
 
@@ -18,7 +19,7 @@ export default function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(0);
   const [stock, setStock] = useState(null);
 
-  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
 
   const params = new URLSearchParams(window.location.search);
   const style = params.get('style');
@@ -37,7 +38,7 @@ export default function ProductDetail({
 
   useEffect(() => {
     const styledVariant = variants.filter(
-      (variant) => variant.style === params.get('style')
+      variant => variant.style === params.get('style')
     )[0];
 
     const variantIndex = variants.indexOf(styledVariant);
@@ -52,7 +53,7 @@ export default function ProductDetail({
       }
       if (
         !recentlyViewed.some(
-          (product) =>
+          product =>
             product.node.name === name &&
             product.selectedVariant === variantIndex
         )
@@ -92,6 +93,7 @@ export default function ProductDetail({
         <RecentlyViewed
           products={JSON.parse(window.localStorage.getItem('recentlyViewed'))}
         />
+        <ProductReviews />
       </Grid>
     </Layout>
   );
