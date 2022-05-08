@@ -31,6 +31,9 @@ const useStyles = makeStyles(theme => ({
   buttonContainer: {
     marginTop: '2rem',
   },
+  rating: {
+    cursor: 'pointer',
+  },
   '@global': {
     '.MuiInput-underline:before, .MuiInput-underline:hover:not(.Mui-disabled):before':
       {
@@ -49,6 +52,7 @@ export default function ProductReview() {
 
   const [values, setValues] = useState({ message: '' });
   const [tempRating, setTempRating] = useState(0);
+  const [rating, setRating] = useState(null);
 
   const fields = {
     message: {
@@ -67,7 +71,14 @@ export default function ProductReview() {
         </Grid>
         <Grid
           item
+          classes={{ root: classes.rating }}
           ref={ratingRef}
+          onClick={() => setRating(tempRating)}
+          onMouseLeave={() => {
+            if (tempRating > rating) {
+              setTempRating(rating);
+            }
+          }}
           onMouseMove={e => {
             const hoverRating =
               ((ratingRef.current.getBoundingClientRect().left - e.clientX) /
@@ -77,7 +88,10 @@ export default function ProductReview() {
             setTempRating(Math.round(hoverRating * 2) / 2);
           }}
         >
-          <Rating number={tempRating} size={2.5} />
+          <Rating
+            number={rating > tempRating ? rating : tempRating}
+            size={2.5}
+          />
         </Grid>
       </Grid>
       <Grid item>
