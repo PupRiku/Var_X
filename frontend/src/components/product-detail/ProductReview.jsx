@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ProductReview({ product, review }) {
+export default function ProductReview({ product, review, setEdit }) {
   const classes = useStyles();
   const { user } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
@@ -188,7 +188,7 @@ export default function ProductReview({ product, review }) {
             )}
           </Grid>
           <Grid item>
-            <Button>
+            <Button onClick={() => setEdit(false)}>
               <span className={classes.cancelButtonText}>Cancel</span>
             </Button>
           </Grid>

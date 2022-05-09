@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,9 @@ import Sizes from '../product-list/Sizes';
 import Swatches from '../product-list/Swatches';
 import QtyButton from '../product-list/QtyButton';
 import { colorIndex } from '../product-list/ProductFrameGrid';
+
+import { UserContext, FeedbackContext } from '../../contexts';
+import { setSnackbar } from '../../contexts/actions';
 
 import favorite from '../../images/favorite.svg';
 import subscription from '../../images/subscription.svg';
@@ -124,8 +127,13 @@ export default function ProductInfo({
   selectedVariant,
   setSelectedVariant,
   stock,
+  setEdit,
 }) {
   const classes = useStyles();
+
+  const { user } = useContext(UserContext);
+  const { dispatchFeedback } = useContext(FeedbackContext);
+
   const [selectedSize, setSelectedSize] = useState(
     variants[selectedVariant].size
   );
@@ -173,6 +181,23 @@ export default function ProductInfo({
   }, [imageIndex]);
 
   const stockDisplay = getStockDisplay(stock, selectedVariant);
+
+  const handleEdit = () => {
+    if (user.username === 'Guest') {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'You must be loggged in to leave a review.',
+        })
+      );
+      return;
+    }
+
+    setEdit(true);
+    const reviewRef = document.getElementById('reviews');
+
+    reviewRef.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <Grid
@@ -230,7 +255,7 @@ export default function ProductInfo({
                 <Rating number={4.5} />
               </Grid>
               <Grid item>
-                <Button>
+                <Button onClick={handleEdit}>
                   <Typography
                     variant='body2'
                     classes={{ root: classes.reviewButton }}

@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ProductReviews({ product }) {
+export default function ProductReviews({ product, edit, setEdit }) {
   const classes = useStyles();
   const [reviews, setReviews] = useState([]);
 
@@ -27,7 +27,14 @@ export default function ProductReviews({ product }) {
   }, [data]);
 
   return (
-    <Grid item container direction='column' classes={{ root: classes.reviews }}>
+    <Grid
+      item
+      container
+      direction='column'
+      id='reviews'
+      classes={{ root: classes.reviews }}
+    >
+      {edit && <ProductReview product={product} setEdit={setEdit} />}
       {reviews.map(review => (
         <ProductReview key={review.id} product={product} review={review} />
       ))}
