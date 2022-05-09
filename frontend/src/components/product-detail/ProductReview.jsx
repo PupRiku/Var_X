@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Rating from '../home/Rating';
 import Fields from '../auth/Fields';
 
-import { UserContext, FeedbackContext } from '../../contexts';
+import { FeedbackContext } from '../../contexts';
 import { setSnackbar } from '../../contexts/actions';
 
 const useStyles = makeStyles(theme => ({
@@ -51,15 +51,26 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ProductReview({ product, review, setEdit }) {
+export default function ProductReview({
+  product,
+  review,
+  setEdit,
+  reviews,
+  user,
+}) {
   const classes = useStyles();
-  const { user } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
   const ratingRef = useRef(null);
 
-  const [values, setValues] = useState({ message: '' });
+  const found = !review
+    ? reviews.find(review => review.user.username === user.username)
+    : null;
+
+  const [values, setValues] = useState({ message: found ? found.text : '' });
   const [tempRating, setTempRating] = useState(0);
-  const [rating, setRating] = useState(review ? review.rating : null);
+  const [rating, setRating] = useState(
+    review ? review.rating : found ? found.rating : null
+  );
   const [loading, setLoading] = useState(null);
 
   const fields = {
@@ -108,6 +119,10 @@ export default function ProductReview({ product, review, setEdit }) {
         );
       });
   };
+
+  const buttonDisabled = found
+    ? found.text === values.message && found.rating === rating
+    : !rating;
 
   return (
     <Grid item container direction='column' classes={{ root: classes.review }}>
@@ -181,9 +196,11 @@ export default function ProductReview({ product, review, setEdit }) {
                 variant='contained'
                 color='primary'
                 onClick={handleReview}
-                disabled={!rating}
+                disabled={buttonDisabled}
               >
-                <span className={classes.reviewButtonText}>Leave Review</span>
+                <span className={classes.reviewButtonText}>
+                  {found ? 'Edit' : 'Leave'} Review
+                </span>
               </Button>
             )}
           </Grid>
