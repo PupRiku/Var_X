@@ -43,6 +43,7 @@ export default function ProductReviews({ product, edit, setEdit }) {
           product={product}
           setEdit={setEdit}
           reviews={reviews}
+          setReviews={setReviews}
           user={user}
         />
       )}

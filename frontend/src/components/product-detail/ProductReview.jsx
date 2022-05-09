@@ -56,6 +56,7 @@ export default function ProductReview({
   review,
   setEdit,
   reviews,
+  setReviews,
   user,
 }) {
   const classes = useStyles();
@@ -83,18 +84,20 @@ export default function ProductReview({
   const handleReview = () => {
     setLoading('leave-review');
 
-    axios
-      .post(
-        process.env.GATSBY_STRAPI_URL + '/reviews',
-        {
-          text: values.message,
-          product,
-          rating,
-        },
-        {
-          headers: { Authorization: `Bearer ${user.jwt}` },
-        }
-      )
+    const axiosFunction = found ? axios.put : axios.post;
+    const route = found ? `/reviews/${found.id}` : '/reviews';
+
+    axiosFunction(
+      process.env.GATSBY_STRAPI_URL + route,
+      {
+        text: values.message,
+        product,
+        rating,
+      },
+      {
+        headers: { Authorization: `Bearer ${user.jwt}` },
+      }
+    )
       .then(response => {
         setLoading(null);
 
@@ -104,6 +107,16 @@ export default function ProductReview({
             message: 'Product Reviewed Successfully',
           })
         );
+
+        if (found) {
+          const newReviews = [...reviews];
+          const reviewIndex = newReviews.indexOf(found);
+
+          newReviews[reviewIndex] = response.data;
+
+          setReviews(newReviews);
+          setEdit(false);
+        }
       })
       .catch(error => {
         setLoading(null);
@@ -165,7 +178,7 @@ export default function ProductReview({
           classes={{ root: clsx(classes.date, classes.light) }}
         >
           {review
-            ? new Date(review.createdAt).toLocaleString([], {
+            ? new Date(review.updatedAt).toLocaleString([], {
                 day: 'numeric',
                 month: 'numeric',
                 year: 'numeric',
