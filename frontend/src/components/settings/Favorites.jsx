@@ -48,19 +48,62 @@ export default function Favorites() {
 
   const setSelectedHelper = (selectedFunction, values, value, row) => {
     selectedFunction({ ...values, [row]: value });
+
+    const { variants } = products.find(favorite => favorite.id === row);
+    const selectedVariant = selectedVariants[row];
+
+    let newVariant;
+
+    if (value.includes('#')) {
+      newVariant = variants.find(
+        variant =>
+          variant.size === selectedSizes[row] &&
+          variant.style === variants[selectedVariant].style &&
+          variant.color === value
+      );
+    } else {
+      let newColors = [];
+
+      variants.map(variant => {
+        if (
+          !newColors.includes(variant.color) &&
+          variant.size === value &&
+          variants[selectedVariant].style === variant.style
+        ) {
+          newColors.push(variant.color);
+        }
+      });
+
+      newVariant = variants.find(
+        variant =>
+          variant.size === value &&
+          variant.style === variants[selectedVariant].style &&
+          variant.color === newColors[0]
+      );
+    }
+
+    setSelectedVariants({
+      ...selectedVariants,
+      [row]: variants.indexOf(newVariant),
+    });
   };
 
   const createData = data =>
-    data.map(item => ({
-      item: {
-        name: item.variants[0].product.name.split(' ')[0],
-        image: item.variants[0].images[0].url,
-      },
-      variant: { all: item.variants, current: item.variant },
-      quantity: item.variants,
-      price: item.variants[0].price,
-      id: item.id,
-    }));
+    data.map(item => {
+      const selectedVariant = selectedVariants[item.id];
+
+      return {
+        item: {
+          name: item.variants[selectedVariant].product.name.split(' ')[0],
+          image: item.variants[selectedVariant].images[0].url,
+        },
+        variant: { all: item.variants, current: item.variant },
+        quantity: item.variants,
+        price: item.variants[selectedVariant].price,
+        id: item.id,
+      };
+    });
+
   const columns = [
     {
       field: 'item',
@@ -134,14 +177,19 @@ export default function Favorites() {
       headerName: 'Quantity',
       width: 250,
       sortable: false,
-      renderCell: ({ value }) => (
-        <QtyButton
-          variants={value}
-          selectedVariant={0}
-          name={value[0].product.name.split(' ')[0]}
-          stock={[{ qty: value[0].qty }]}
-        />
-      ),
+      renderCell: ({ value, row }) => {
+        const selectedVariant = selectedVariants[row.id];
+        const stock = value.map(variant => ({ qty: variant.qty }));
+
+        return (
+          <QtyButton
+            variants={value}
+            selectedVariant={selectedVariant}
+            name={value[selectedVariant].product.name.split(' ')[0]}
+            stock={stock}
+          />
+        );
+      },
     },
     {
       field: 'price',
@@ -163,7 +211,8 @@ export default function Favorites() {
     },
   ];
 
-  const rows = createData(products);
+  const rows =
+    Object.keys(selectedVariants).length > 0 ? createData(products) : [];
 
   useEffect(() => {
     axios
@@ -172,6 +221,26 @@ export default function Favorites() {
       })
       .then(response => {
         setProducts(response.data);
+
+        let newVariants = {};
+        let newSizes = {};
+        let newColors = {};
+
+        response.data.forEach(favorite => {
+          const found = favorite.variants.find(
+            variant => variant.id === favorite.variant.id
+          );
+
+          const index = favorite.variants.indexOf(found);
+
+          newVariants = { ...newVariants, [favorite.id]: index };
+          newSizes = { ...newSizes, [favorite.id]: favorite.variant.size };
+          newColors = { ...newColors, [favorite.id]: favorite.variant.color };
+        });
+
+        setSelectedVariants(newVariants);
+        setSelectedSizes(newSizes);
+        setSelectedColors(newColors);
       })
       .catch(error => {
         console.error(error);
