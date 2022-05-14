@@ -4,7 +4,7 @@ import Fab from '@material-ui/core/Fab';
 import Pagination from '@material-ui/lab/Pagination';
 import Grid from '@material-ui/core/Grid';
 import { graphql } from 'gatsby';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, styled } from '@material-ui/core/styles';
 
 import Layout from '../components/ui/layout';
 import DynamicToolbar from '../components/product-list/DynamicToolbar';
@@ -14,8 +14,9 @@ import {
   time,
   price,
 } from '../components/product-list/SortFunctions';
+import PaginationItem from '@material-ui/lab/PaginationItem';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   fab: {
     alignSelf: 'flex-end',
     marginRight: '2rem',
@@ -35,17 +36,25 @@ const useStyles = makeStyles((theme) => ({
       marginTop: '1rem',
     },
   },
-  '@global': {
-    '.MuiPaginationItem-root': {
-      fontFamily: 'Montserrat',
-      fontSize: '2rem',
-      color: theme.palette.primary.main,
-      '&.Mui-selected': {
-        color: '#fff',
-      },
-    },
-  },
 }));
+
+export const StyledPagination = props => {
+  const StyledPaginationItem = styled(PaginationItem)(({ theme }) => ({
+    fontFamily: 'Montserrat',
+    fontSize: '2rem',
+    color: theme.palette.primary.main,
+    '&.Mui-selected': {
+      color: '#fff',
+    },
+  }));
+
+  return (
+    <Pagination
+      {...props}
+      renderItem={item => <StyledPaginationItem {...item} />}
+    />
+  );
+};
 
 export default function ProductList({
   pageContext: { filterOptions: options, name, description },
@@ -58,21 +67,21 @@ export default function ProductList({
   const [page, setPage] = useState(1);
   const [filterOptions, setFilterOptions] = useState(options);
   const [sortOptions, setSortOptions] = useState([
-    { label: 'A-Z', active: true, function: (data) => alphabetic(data, 'asc') },
+    { label: 'A-Z', active: true, function: data => alphabetic(data, 'asc') },
     {
       label: 'Z-A',
       active: false,
-      function: (data) => alphabetic(data, 'desc'),
+      function: data => alphabetic(data, 'desc'),
     },
-    { label: 'NEWEST', active: false, function: (data) => time(data, 'asc') },
-    { label: 'OLDEST', active: false, function: (data) => time(data, 'desc') },
-    { label: 'PRICE ↑', active: false, function: (data) => price(data, 'asc') },
+    { label: 'NEWEST', active: false, function: data => time(data, 'asc') },
+    { label: 'OLDEST', active: false, function: data => time(data, 'desc') },
+    { label: 'PRICE ↑', active: false, function: data => price(data, 'asc') },
     {
       label: 'PRICE ↓',
       active: false,
-      function: (data) => price(data, 'desc'),
+      function: data => price(data, 'desc'),
     },
-    { label: 'REVIEWS', active: false, function: (data) => data },
+    { label: 'REVIEWS', active: false, function: data => data },
   ]);
   const scrollRef = useRef(null);
 
@@ -87,13 +96,11 @@ export default function ProductList({
   const productsPerPage = layout === 'grid' ? 16 : 6;
 
   var content = [];
-  const selectedSort = sortOptions.filter((option) => option.active)[0];
+  const selectedSort = sortOptions.filter(option => option.active)[0];
   const sortedProducts = selectedSort.function(products);
 
   sortedProducts.map((product, i) =>
-    product.node.variants.map((variant) =>
-      content.push({ product: i, variant })
-    )
+    product.node.variants.map(variant => content.push({ product: i, variant }))
   );
 
   var isFiltered = false;
@@ -101,9 +108,9 @@ export default function ProductList({
   var filteredProducts = [];
 
   Object.keys(filterOptions)
-    .filter((option) => filterOptions[option] !== null)
-    .map((option) => {
-      filterOptions[option].forEach((value) => {
+    .filter(option => filterOptions[option] !== null)
+    .map(option => {
+      filterOptions[option].forEach(value => {
         if (value.checked) {
           isFiltered = true;
 
@@ -115,7 +122,7 @@ export default function ProductList({
             filters[option].push(value);
           }
 
-          content.forEach((item) => {
+          content.forEach(item => {
             if (option === 'Color') {
               if (
                 item.variant.colorLabel === value.label &&
@@ -134,11 +141,11 @@ export default function ProductList({
       });
     });
 
-  Object.keys(filters).forEach((filter) => {
-    filteredProducts = filteredProducts.filter((item) => {
+  Object.keys(filters).forEach(filter => {
+    filteredProducts = filteredProducts.filter(item => {
       let valid;
 
-      filters[filter].some((value) => {
+      filters[filter].some(value => {
         if (filter === 'Color') {
           if (item.variant.colorLabel === value.label) {
             valid = item;
@@ -180,7 +187,7 @@ export default function ProductList({
           content={content}
           filterOptions={filterOptions}
         />
-        <Pagination
+        <StyledPagination
           count={numPages}
           page={page}
           onChange={(e, newPage) => setPage(newPage)}
