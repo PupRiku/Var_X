@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 export default function Favorite({
   color,
   size,
-  product,
+  variant,
   buttonClass,
   noPadding,
 }) {
@@ -60,7 +60,7 @@ export default function Favorite({
 
     axiosFunction(
       process.env.GATSBY_STRAPI_URL + route,
-      { product, headers: existingFavorite ? auth : undefined },
+      { variant, headers: existingFavorite ? auth : undefined },
       { headers: auth }
     )
       .then(response => {
@@ -69,7 +69,7 @@ export default function Favorite({
         dispatchFeedback(
           setSnackbar({
             status: 'success',
-            message: `${existingFavorite ? 'Deleted' : 'Added'} product ${
+            message: `${existingFavorite ? 'Deleted' : 'Added'} variant ${
               existingFavorite ? 'from' : 'to'
             } favorites.`,
           })
@@ -84,7 +84,7 @@ export default function Favorite({
         } else {
           newFavorites.push({
             id: response.data.id,
-            product: response.data.product.id,
+            variant: response.data.variant.id,
           });
         }
 
@@ -108,7 +108,7 @@ export default function Favorite({
   };
 
   const existingFavorite = user.favorites?.find(
-    favorite => favorite.product === product
+    favorite => favorite.variant === variant
   );
 
   if (loading) return <CircularProgress size={`${size || 2}rem`} />;
