@@ -69,7 +69,7 @@ export default function Favorite({
         dispatchFeedback(
           setSnackbar({
             status: 'success',
-            message: `${existingFavorite ? 'Deleted' : 'Added'} variant ${
+            message: `${existingFavorite ? 'Deleted' : 'Added'} Product ${
               existingFavorite ? 'from' : 'to'
             } favorites.`,
           })
