@@ -11,6 +11,7 @@ import clsx from 'clsx';
 
 import Settings from './Settings';
 import OrderHistory from './OrderHistory';
+import Favorites from './Favorites';
 import { UserContext } from '../../contexts';
 import { setUser } from '../../contexts/actions';
 
@@ -97,7 +98,7 @@ export default function SettingsPortal() {
   const buttons = [
     { label: 'Settings', icon: settingsIcon, component: Settings, large: true },
     { label: 'Order History', icon: orderHistoryIcon, component: OrderHistory },
-    { label: 'Favorites', icon: favoritesIcon },
+    { label: 'Favorites', icon: favoritesIcon, component: Favorites },
     { label: 'Subscriptions', icon: subscriptionIcon },
   ];
 
