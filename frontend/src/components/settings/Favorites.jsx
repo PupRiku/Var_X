@@ -5,12 +5,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
-import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Sizes from '../product-list/Sizes';
 import Swatches from '../product-list/Swatches';
 import QtyButton from '../product-list/QtyButton';
+import SettingsGrid from './SettingsGrid';
 
 import Delete from '../../images/Delete';
 
@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     height: '10rem',
     width: '10rem',
   },
+  name: {
+    color: '#fff',
+  },
   chipRoot: {
     height: '3rem',
     width: '10rem',
@@ -37,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Favorites() {
+export default function Favorites({ setSelectedSetting }) {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
   const [selectedVariants, setSelectedVariants] = useState({});
@@ -203,6 +206,7 @@ export default function Favorites() {
       field: '',
       width: 500,
       sortable: false,
+      disableColumnMenu: true,
       renderCell: ({ value }) => (
         <span className={classes.deleteWrapper}>
           <Delete />
@@ -256,11 +260,11 @@ export default function Favorites() {
 
   return (
     <Grid item container classes={{ root: classes.container }}>
-      <DataGrid
-        hideFooterSelectedRowCount
+      <SettingsGrid
+        setSelectedSetting={setSelectedSetting}
         rows={rows}
         columns={columns}
-        pageSize={5}
+        rowsPerPage={3}
       />
     </Grid>
   );
