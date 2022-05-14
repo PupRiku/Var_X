@@ -20,7 +20,7 @@ import { colorIndex } from '../product-list/ProductFrameGrid';
 import { UserContext, FeedbackContext } from '../../contexts';
 import { setSnackbar } from '../../contexts/actions';
 
-import favorite from '../../images/favorite.svg';
+import Favorite from '../../images/Favorite';
 import subscription from '../../images/subscription.svg';
 
 const useStyles = makeStyles(theme => ({
@@ -211,6 +211,10 @@ export default function ProductInfo({
     reviewRef.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const existingFavorite = user.favorites?.find(
+    favorite => favorite.product === product
+  );
+
   const handleFavorite = () => {
     if (user.username === 'Guest') {
       dispatchFeedback(
@@ -277,11 +281,9 @@ export default function ProductInfo({
               onClick={handleFavorite}
               classes={{ root: classes.iconButton }}
             >
-              <img
-                src={favorite}
-                alt={'add item to favorites'}
-                className={classes.icon}
-              />
+              <span className={classes.icon}>
+                <Favorite filled={existingFavorite} />
+              </span>
             </IconButton>
           )}
         </Grid>
