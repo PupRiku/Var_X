@@ -11,7 +11,7 @@ import ProductFrameList from './ProductFrameList';
 
 import { GET_DETAILS } from '../../apollo/queries';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   productContainer: {
     width: '95%',
     [theme.breakpoints.only('xl')]: {
@@ -62,13 +62,14 @@ export default function ListOfProducts({
 }) {
   const classes = useStyles({ layout });
 
-  const matchesSM = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const matchesSM = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   const FrameHelper = ({ Frame, product, variant }) => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [stock, setStock] = useState(null);
+    const [rating, setRating] = useState(0);
 
     const { loading, error, data } = useQuery(GET_DETAILS, {
       variables: { id: product.node.strapiId },
@@ -79,13 +80,14 @@ export default function ListOfProducts({
         setStock(-1);
       } else if (data) {
         setStock(data.product.variants);
+        setRating(data.product.rating);
       }
     }, [error, data]);
 
     var sizes = [];
     var colors = [];
 
-    product.node.variants.map((item) => {
+    product.node.variants.map(item => {
       sizes.push(item.size);
 
       if (
@@ -103,7 +105,7 @@ export default function ListOfProducts({
       setSelectedColor(null);
 
       const newVariant = product.node.variants.find(
-        (item) =>
+        item =>
           item.size === selectedSize &&
           item.style === variant.style &&
           item.color === colors[0]
@@ -113,7 +115,7 @@ export default function ListOfProducts({
     }, [selectedSize]);
 
     const hasStyles = product.node.variants.some(
-      (variant) => variant.style !== null
+      variant => variant.style !== null
     );
 
     return (
@@ -128,6 +130,7 @@ export default function ListOfProducts({
         setSelectedColor={setSelectedColor}
         hasStyles={hasStyles}
         stock={stock}
+        rating={rating}
       />
     );
   };
@@ -142,7 +145,7 @@ export default function ListOfProducts({
     >
       {content
         .slice((page - 1) * productsPerPage, page * productsPerPage)
-        .map((item) => (
+        .map(item => (
           <FrameHelper
             Frame={layout === 'grid' ? ProductFrameGrid : ProductFrameList}
             key={item.variant.id}

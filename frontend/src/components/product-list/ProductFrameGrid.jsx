@@ -10,7 +10,7 @@ import { navigate } from 'gatsby';
 import frame from '../../images/product-frame-grid.svg';
 import QuickView from './QuickView';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   frame: {
     backgroundImage: `url(${frame})`,
     backgroundPosition: 'center',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 export const colorIndex = (product, variant, color) => {
   return product.node.variants.indexOf(
     product.node.variants.filter(
-      (item) =>
+      item =>
         item.color === color &&
         variant.style === item.style &&
         item.size === variant.size
@@ -91,11 +91,12 @@ export default function ProductFrameGrid({
   disableQuickView,
   small,
   stock,
+  rating,
 }) {
   const classes = useStyles({ small });
   const [open, setOpen] = useState(false);
 
-  const matchesMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
 
   if (matchesMD && open) {
     setOpen(false);
@@ -161,6 +162,7 @@ export default function ProductFrameGrid({
         hasStyles={hasStyles}
         stock={stock}
         imageIndex={imageIndex}
+        rating={rating}
       />
     </Grid>
   );
