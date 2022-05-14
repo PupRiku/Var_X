@@ -1,5 +1,8 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -94,6 +97,12 @@ const useStyles = makeStyles(theme => ({
   actionsContainer: {
     padding: '0 1rem',
   },
+  iconButton: {
+    padding: 0,
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
   '@global': {
     '.MuiButtonGroup-groupedOutlinedVertical:not(:first-child)': {
       marginTop: 0,
@@ -129,6 +138,7 @@ export default function ProductInfo({
   stock,
   rating,
   setEdit,
+  product,
 }) {
   const classes = useStyles();
 
@@ -139,6 +149,7 @@ export default function ProductInfo({
     variants[selectedVariant].size
   );
   const [selectedColor, setSelectedColor] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
@@ -200,6 +211,49 @@ export default function ProductInfo({
     reviewRef.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleFavorite = () => {
+    if (user.username === 'Guest') {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'You must be logged in to add an item to favorites.',
+        })
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    axios
+      .post(
+        process.env.GATSBY_STRAPI_URL + '/favorites',
+        { product },
+        { headers: { Authorization: `Bearer ${user.jwt}` } }
+      )
+      .then(response => {
+        setLoading(false);
+
+        dispatchFeedback(
+          setSnackbar({
+            status: 'success',
+            message: 'Added product to favorites.',
+          })
+        );
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error(error);
+
+        dispatchFeedback(
+          setSnackbar({
+            status: 'error',
+            message:
+              'There was a problem adding this item to favorites, please try again.',
+          })
+        );
+      });
+  };
+
   return (
     <Grid
       item
@@ -216,11 +270,20 @@ export default function ProductInfo({
         classes={{ root: classes.background }}
       >
         <Grid item>
-          <img
-            src={favorite}
-            alt={'add item to favorites'}
-            className={classes.icon}
-          />
+          {loading ? (
+            <CircularProgress size='4rem' />
+          ) : (
+            <IconButton
+              onClick={handleFavorite}
+              classes={{ root: classes.iconButton }}
+            >
+              <img
+                src={favorite}
+                alt={'add item to favorites'}
+                className={classes.icon}
+              />
+            </IconButton>
+          )}
         </Grid>
         <Grid item>
           <img
