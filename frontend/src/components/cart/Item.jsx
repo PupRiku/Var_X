@@ -12,7 +12,7 @@ import QtyButton from '../product-list/QtyButton';
 import { CartContext } from '../../contexts';
 import { removeFromCart } from '../../contexts/actions';
 
-import FavoriteIcon from '../../images/Favorite';
+import FavoriteIcon from '../ui/favorite';
 import SubscribeIcon from '../../images/Subscription';
 import DeleteIcon from '../../images/Delete';
 
@@ -78,7 +78,14 @@ export default function Item({ item }) {
   };
 
   const actions = [
-    { icon: FavoriteIcon, color: theme.palette.secondary.main },
+    {
+      component: FavoriteIcon,
+      props: {
+        color: theme.palette.secondary.main,
+        size: matchesXS ? 2 : 3,
+        buttonClass: classes.actionButton,
+      },
+    },
     { icon: SubscribeIcon, color: theme.palette.secondary.main },
     {
       icon: DeleteIcon,
@@ -137,18 +144,22 @@ export default function Item({ item }) {
           <Grid item container justifyContent='flex-end' xs={5} sm>
             {actions.map((action, i) => (
               <Grid item key={i}>
-                <IconButton
-                  disableRipple
-                  classes={{ root: classes.actionButton }}
-                  onClick={() => action.onClick()}
-                >
-                  <span
-                    className={classes.actionWrapper}
-                    style={{ height: action.size, width: action.size }}
+                {action.component ? (
+                  <action.component {...action.props} />
+                ) : (
+                  <IconButton
+                    disableRipple
+                    classes={{ root: classes.actionButton }}
+                    onClick={() => action.onClick()}
                   >
-                    <action.icon color={action.color} />
-                  </span>
-                </IconButton>
+                    <span
+                      className={classes.actionWrapper}
+                      style={{ height: action.size, width: action.size }}
+                    >
+                      <action.icon color={action.color} />
+                    </span>
+                  </IconButton>
+                )}
               </Grid>
             ))}
           </Grid>

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,15 +19,21 @@ const useStyles = makeStyles(theme => ({
     width: ({ size }) => `${size || 2}rem`,
   },
   iconButton: {
-    padding: 0,
+    padding: ({ noPadding }) => (noPadding ? 0 : undefined),
     '&:hover': {
       backgroundColor: 'transparent',
     },
   },
 }));
 
-export default function Favorite({ color, size, product }) {
-  const classes = useStyles({ size });
+export default function Favorite({
+  color,
+  size,
+  product,
+  buttonClass,
+  noPadding,
+}) {
+  const classes = useStyles({ size, noPadding });
 
   const { user, dispatchUser } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
@@ -107,7 +114,10 @@ export default function Favorite({ color, size, product }) {
   if (loading) return <CircularProgress size={`${size || 2}rem`} />;
 
   return (
-    <IconButton onClick={handleFavorite} classes={{ root: classes.iconButton }}>
+    <IconButton
+      onClick={handleFavorite}
+      classes={{ root: clsx(classes.iconButton, buttonClass) }}
+    >
       <span className={classes.icon}>
         <FavoriteIcon color={color} filled={existingFavorite} />
       </span>
