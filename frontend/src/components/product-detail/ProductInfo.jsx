@@ -1,8 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -12,15 +9,15 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Rating from '../home/Rating';
+import Favorite from '../ui/favorite';
 import Sizes from '../product-list/Sizes';
 import Swatches from '../product-list/Swatches';
 import QtyButton from '../product-list/QtyButton';
 import { colorIndex } from '../product-list/ProductFrameGrid';
 
 import { UserContext, FeedbackContext } from '../../contexts';
-import { setSnackbar, setUser } from '../../contexts/actions';
+import { setSnackbar } from '../../contexts/actions';
 
-import Favorite from '../../images/Favorite';
 import subscription from '../../images/subscription.svg';
 
 const useStyles = makeStyles(theme => ({
@@ -53,6 +50,8 @@ const useStyles = makeStyles(theme => ({
   icon: {
     height: '4rem',
     width: '4rem',
+  },
+  iconWrapper: {
     margin: '0.5rem 1rem',
   },
   sectionContainer: {
@@ -97,12 +96,6 @@ const useStyles = makeStyles(theme => ({
   actionsContainer: {
     padding: '0 1rem',
   },
-  iconButton: {
-    padding: 0,
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
   '@global': {
     '.MuiButtonGroup-groupedOutlinedVertical:not(:first-child)': {
       marginTop: 0,
@@ -142,14 +135,13 @@ export default function ProductInfo({
 }) {
   const classes = useStyles();
 
-  const { user, dispatchUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
 
   const [selectedSize, setSelectedSize] = useState(
     variants[selectedVariant].size
   );
   const [selectedColor, setSelectedColor] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
@@ -211,78 +203,6 @@ export default function ProductInfo({
     reviewRef.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const existingFavorite = user.favorites?.find(
-    favorite => favorite.product === product
-  );
-
-  const handleFavorite = () => {
-    if (user.username === 'Guest') {
-      dispatchFeedback(
-        setSnackbar({
-          status: 'error',
-          message: 'You must be logged in to add an item to favorites.',
-        })
-      );
-      return;
-    }
-
-    setLoading(true);
-
-    const axiosFunction = existingFavorite ? axios.delete : axios.post;
-    const route = existingFavorite
-      ? `/favorites/${existingFavorite.id}`
-      : '/favorites';
-    const auth = { Authorization: `Bearer ${user.jwt}` };
-
-    axiosFunction(
-      process.env.GATSBY_STRAPI_URL + route,
-      { product, headers: existingFavorite ? auth : undefined },
-      { headers: auth }
-    )
-      .then(response => {
-        setLoading(false);
-
-        dispatchFeedback(
-          setSnackbar({
-            status: 'success',
-            message: `${existingFavorite ? 'Deleted' : 'Added'} product ${
-              existingFavorite ? 'from' : 'to'
-            } favorites.`,
-          })
-        );
-
-        let newFavorites = [...user.favorites];
-
-        if (existingFavorite) {
-          newFavorites = newFavorites.filter(
-            favorite => favorite.id !== existingFavorite.id
-          );
-        } else {
-          newFavorites.push({
-            id: response.data.id,
-            product: response.data.product.id,
-          });
-        }
-
-        dispatchUser(setUser({ ...user, favorites: newFavorites }));
-      })
-      .catch(error => {
-        setLoading(false);
-        console.error(error);
-
-        dispatchFeedback(
-          setSnackbar({
-            status: 'error',
-            message: `There was a problem ${
-              existingFavorite ? 'deleting' : 'adding'
-            } this item ${
-              existingFavorite ? 'from' : 'to'
-            } favorites, please try again.`,
-          })
-        );
-      });
-  };
-
   return (
     <Grid
       item
@@ -298,21 +218,10 @@ export default function ProductInfo({
         justifyContent='flex-end'
         classes={{ root: classes.background }}
       >
-        <Grid item>
-          {loading ? (
-            <CircularProgress size='4rem' />
-          ) : (
-            <IconButton
-              onClick={handleFavorite}
-              classes={{ root: classes.iconButton }}
-            >
-              <span className={classes.icon}>
-                <Favorite filled={existingFavorite} />
-              </span>
-            </IconButton>
-          )}
+        <Grid item classes={{ root: classes.iconWrapper }}>
+          <Favorite size={4} product={product} />
         </Grid>
-        <Grid item>
+        <Grid item classes={{ root: classes.iconWrapper }}>
           <img
             src={subscription}
             alt={'add item to subscriptions'}
