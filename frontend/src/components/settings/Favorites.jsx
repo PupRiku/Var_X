@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Sizes from '../product-list/Sizes';
@@ -15,7 +16,7 @@ import SettingsGrid from './SettingsGrid';
 import Delete from '../../images/Delete';
 
 import { UserContext, FeedbackContext } from '../../contexts';
-import { setSnackbar } from '../../contexts/actions';
+import { setSnackbar, setUser } from '../../contexts/actions';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -46,7 +47,8 @@ export default function Favorites({ setSelectedSetting }) {
   const [selectedVariants, setSelectedVariants] = useState({});
   const [selectedSizes, setSelectedSizes] = useState({});
   const [selectedColors, setSelectedColors] = useState({});
-  const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(null);
+  const { user, dispatchUser } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
 
   const setSelectedHelper = (selectedFunction, values, value, row) => {
@@ -106,6 +108,44 @@ export default function Favorites({ setSelectedSetting }) {
         id: item.id,
       };
     });
+
+  const handleDelete = row => {
+    setLoading(row);
+
+    axios
+      .delete(process.env.GATSBY_STRAPI_URL + `/favorites/${row}`, {
+        headers: { Authorization: `Bearer ${user.jwt}` },
+      })
+      .then(response => {
+        setLoading(null);
+
+        const newProducts = products.filter(product => product.id !== row);
+        const newFavorites = user.favorites.filter(
+          favorite => favorite.id !== row
+        );
+        setProducts(newProducts);
+        dispatchUser(setUser({ ...user, favorites: newFavorites }));
+
+        dispatchFeedback(
+          setSnackbar({
+            status: 'success',
+            message: 'Product removed from favorites',
+          })
+        );
+      })
+      .catch(error => {
+        setLoading(null);
+        console.error(error);
+
+        dispatchFeedback(
+          setSnackbar({
+            status: 'error',
+            message:
+              'There was a problem removing this product from your favorites. Please try again.',
+          })
+        );
+      });
+  };
 
   const columns = [
     {
@@ -207,10 +247,16 @@ export default function Favorites({ setSelectedSetting }) {
       width: 500,
       sortable: false,
       disableColumnMenu: true,
-      renderCell: ({ value }) => (
-        <span className={classes.deleteWrapper}>
-          <Delete />
-        </span>
+      renderCell: ({ value, row }) => (
+        <IconButton onClick={() => handleDelete(row.id)} disabled={!!loading}>
+          {loading === row.id ? (
+            <CircularProgress size='2rem' color='secondary' />
+          ) : (
+            <span className={classes.deleteWrapper}>
+              <Delete />
+            </span>
+          )}
+        </IconButton>
       ),
     },
   ];
