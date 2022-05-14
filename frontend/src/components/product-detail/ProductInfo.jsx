@@ -18,7 +18,7 @@ import QtyButton from '../product-list/QtyButton';
 import { colorIndex } from '../product-list/ProductFrameGrid';
 
 import { UserContext, FeedbackContext } from '../../contexts';
-import { setSnackbar } from '../../contexts/actions';
+import { setSnackbar, setUser } from '../../contexts/actions';
 
 import Favorite from '../../images/Favorite';
 import subscription from '../../images/subscription.svg';
@@ -142,7 +142,7 @@ export default function ProductInfo({
 }) {
   const classes = useStyles();
 
-  const { user } = useContext(UserContext);
+  const { user, dispatchUser } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
 
   const [selectedSize, setSelectedSize] = useState(
@@ -228,21 +228,43 @@ export default function ProductInfo({
 
     setLoading(true);
 
-    axios
-      .post(
-        process.env.GATSBY_STRAPI_URL + '/favorites',
-        { product },
-        { headers: { Authorization: `Bearer ${user.jwt}` } }
-      )
+    const axiosFunction = existingFavorite ? axios.delete : axios.post;
+    const route = existingFavorite
+      ? `/favorites/${existingFavorite.id}`
+      : '/favorites';
+    const auth = { Authorization: `Bearer ${user.jwt}` };
+
+    axiosFunction(
+      process.env.GATSBY_STRAPI_URL + route,
+      { product, headers: existingFavorite ? auth : undefined },
+      { headers: auth }
+    )
       .then(response => {
         setLoading(false);
 
         dispatchFeedback(
           setSnackbar({
             status: 'success',
-            message: 'Added product to favorites.',
+            message: `${existingFavorite ? 'Deleted' : 'Added'} product ${
+              existingFavorite ? 'from' : 'to'
+            } favorites.`,
           })
         );
+
+        let newFavorites = [...user.favorites];
+
+        if (existingFavorite) {
+          newFavorites = newFavorites.filter(
+            favorite => favorite.id !== existingFavorite.id
+          );
+        } else {
+          newFavorites.push({
+            id: response.data.id,
+            product: response.data.product.id,
+          });
+        }
+
+        dispatchUser(setUser({ ...user, favorites: newFavorites }));
       })
       .catch(error => {
         setLoading(false);
@@ -251,8 +273,11 @@ export default function ProductInfo({
         dispatchFeedback(
           setSnackbar({
             status: 'error',
-            message:
-              'There was a problem adding this item to favorites, please try again.',
+            message: `There was a problem ${
+              existingFavorite ? 'deleting' : 'adding'
+            } this item ${
+              existingFavorite ? 'from' : 'to'
+            } favorites, please try again.`,
           })
         );
       });
