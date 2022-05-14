@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/client';
 
 import ProductReview from './ProductReview';
+import { StyledPagination } from '../../templates/ProductList';
 import { GET_REVIEWS } from '../../apollo/queries';
 
 import { UserContext } from '../../contexts';
@@ -14,11 +15,15 @@ const useStyles = makeStyles(theme => ({
   reviews: {
     padding: '0 3rem',
   },
+  pagination: {
+    marginBottom: '3rem',
+  },
 }));
 
 export default function ProductReviews({ product, edit, setEdit }) {
   const classes = useStyles();
   const [reviews, setReviews] = useState([]);
+  const [page, setPage] = useState(1);
 
   const { user } = useContext(UserContext);
 
@@ -29,6 +34,9 @@ export default function ProductReviews({ product, edit, setEdit }) {
       setReviews(data.product.reviews);
     }
   }, [data]);
+
+  const reviewsPerPage = 15;
+  const numPages = Math.ceil(reviews.length / reviewsPerPage);
 
   return (
     <Grid
@@ -51,6 +59,7 @@ export default function ProductReviews({ product, edit, setEdit }) {
         .filter(review =>
           edit ? review.user.username !== user.username : review
         )
+        .slice((page - 1) * reviewsPerPage, page * reviewsPerPage)
         .map(review => (
           <ProductReview
             key={review.id}
@@ -59,6 +68,17 @@ export default function ProductReviews({ product, edit, setEdit }) {
             reviews={reviews}
           />
         ))}
+      <Grid item container justifyContent='flex-end'>
+        <Grid item>
+          <StyledPagination
+            classes={{ root: classes.pagination }}
+            count={numPages}
+            page={page}
+            onChange={(e, newPage) => setPage(newPage)}
+            color='primary'
+          />
+        </Grid>
+      </Grid>
     </Grid>
   );
 }
