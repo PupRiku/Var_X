@@ -36,12 +36,13 @@ const useStyles = makeStyles(theme => ({
     },
   },
   locationContainer: {
+    height: '100%',
     display: ({ checkout, selectedStep, stepNumber }) =>
       checkout && selectedStep !== stepNumber ? 'none' : 'flex',
     position: 'relative',
     [theme.breakpoints.down('md')]: {
       borderBottom: '4px solid #fff',
-      height: '30rem',
+      height: ({ checkout }) => (!checkout ? '30rem' : '100%'),
     },
   },
   slotContainer: {
