@@ -102,7 +102,7 @@ export default function SettingsGrid({
   const classes = useStyles();
 
   return (
-    <Grid item container classes={classes.container}>
+    <Grid item container classes={{ root: classes.container }}>
       <Grid item classes={{ root: classes.header }}>
         <IconButton onClick={() => setSelectedSetting(null)}>
           <div className={classes.icon}>
