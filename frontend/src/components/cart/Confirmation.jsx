@@ -164,7 +164,7 @@ export default function Confirmation({
     0
   );
 
-  const tax = subtotal * 0.055;
+  const tax = (subtotal + shipping?.price) * 0.055;
 
   const firstFields = [
     {
