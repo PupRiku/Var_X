@@ -9,13 +9,13 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import QtyButton from '../product-list/QtyButton';
+import SubscriptionIcon from '../ui/subscription';
 import SelectFrequency from '../ui/select-frequency';
 
 import { CartContext } from '../../contexts';
 import { removeFromCart, changeFrequency } from '../../contexts/actions';
 
 import FavoriteIcon from '../ui/favorite';
-import SubscribeIcon from '../../images/Subscription';
 import DeleteIcon from '../../images/Delete';
 
 const useStyles = makeStyles(theme => ({
@@ -111,7 +111,14 @@ export default function Item({ item }) {
         variant: item.variant.id,
       },
     },
-    { icon: SubscribeIcon, color: theme.palette.secondary.main },
+    {
+      component: SubscriptionIcon,
+      props: {
+        color: theme.palette.secondary.main,
+        isCart: item,
+        size: matchesXS ? 2 : 3,
+      },
+    },
     {
       icon: DeleteIcon,
       color: theme.palette.error.main,
