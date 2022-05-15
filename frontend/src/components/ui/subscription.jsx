@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import clsx from 'clsx';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import QtyButton from '../product-list/QtyButton';
 
-import { CartContext } from '../../contexts';
+import { CartContext, FeedbackContext } from '../../contexts';
+import { setSnackbar, addToCart } from '../../contexts/actions';
 
 import SubscriptionIcon from '../../images/Subscription';
 
@@ -71,10 +72,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Subscription({ size, stock, selectedVariant }) {
+export default function Subscription({
+  size,
+  stock,
+  selectedVariant,
+  variant,
+  name,
+}) {
   const classes = useStyles({ size });
   const [open, setOpen] = useState(false);
+  const [qty, setQty] = useState(1);
   const [frequency, setFrequency] = useState('Month');
+  const { dispatchFeedback } = useContext(FeedbackContext);
+  const { dispatchCart } = useContext(CartContext);
 
   const frequencies = [
     'Week',
@@ -84,6 +94,18 @@ export default function Subscription({ size, stock, selectedVariant }) {
     'Six Months',
     'Year',
   ];
+
+  const handleCart = () => {
+    dispatchCart(
+      addToCart(variant, qty, name, stock[selectedVariant].qty, frequency)
+    );
+
+    setOpen(false);
+
+    dispatchFeedback(
+      setSnackbar({ status: 'success', message: 'Subscription Added To Cart.' })
+    );
+  };
 
   return (
     <>
@@ -117,6 +139,7 @@ export default function Subscription({ size, stock, selectedVariant }) {
               <QtyButton
                 stock={stock}
                 selectedVariant={selectedVariant}
+                override={{ value: qty, setValue: setQty }}
                 white
                 hideCartButton
                 round
@@ -166,6 +189,7 @@ export default function Subscription({ size, stock, selectedVariant }) {
           <Grid item>
             <Button
               variant='contained'
+              onClick={handleCart}
               color='secondary'
               classes={{ root: classes.cartButton }}
             >

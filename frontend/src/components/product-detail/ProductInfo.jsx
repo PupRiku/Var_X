@@ -226,6 +226,8 @@ export default function ProductInfo({
             size={4}
             stock={stock}
             selectedVariant={selectedVariant}
+            variant={variants[selectedVariant]}
+            name={name.split(' ')[0]}
           />
         </Grid>
       </Grid>
