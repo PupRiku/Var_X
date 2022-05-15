@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   row: {
     height: '4rem',
+    padding: '0 0.5rem',
   },
   dark: {
     backgroundColor: theme.palette.secondary.main,
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Subscription({ size }) {
+export default function Subscription({ size, stock, selectedVariant }) {
   const classes = useStyles({ size });
   const [open, setOpen] = useState(false);
 
@@ -71,11 +72,21 @@ export default function Subscription({ size }) {
           <Grid
             item
             container
+            alignItems='center'
             justifyContent='space-between'
             classes={{ root: clsx(classes.row, classes.dark) }}
           >
             <Grid item>
               <Typography variant='h4'>Quantity</Typography>
+            </Grid>
+            <Grid item>
+              <QtyButton
+                stock={stock}
+                selectedVariant={selectedVariant}
+                white
+                hideCartButton
+                round
+              />
             </Grid>
           </Grid>
           <Grid

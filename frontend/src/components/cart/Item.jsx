@@ -125,6 +125,8 @@ export default function Item({ item }) {
               variants={[item.variant]}
               stock={[{ qty: item.stock }]}
               isCart
+              white
+              hideCartButton
             />
           </Grid>
         </Grid>
