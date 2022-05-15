@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
 import QtyButton from '../product-list/QtyButton';
@@ -26,6 +27,9 @@ const useStyles = makeStyles(theme => ({
   row: {
     height: '4rem',
     padding: '0 0.5rem',
+    [theme.breakpoints.down('xs')]: {
+      height: 'auto',
+    },
   },
   dark: {
     backgroundColor: theme.palette.secondary.main,
@@ -40,13 +44,23 @@ const useStyles = makeStyles(theme => ({
     height: '8rem',
     borderRadius: 0,
     width: '100%',
+    [theme.breakpoints.down('xs')]: {
+      height: 'auto',
+    },
   },
   cartText: {
     color: '#fff',
     fontSize: '4rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '3.25rem',
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '2rem',
+    },
   },
   dialog: {
     borderRadius: 0,
+    backgroundColor: theme.palette.primary.main,
   },
   chipRoot: {
     backgroundColor: '#fff',
@@ -85,6 +99,7 @@ export default function Subscription({
   const [frequency, setFrequency] = useState('Month');
   const { dispatchFeedback } = useContext(FeedbackContext);
   const { dispatchCart } = useContext(CartContext);
+  const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const frequencies = [
     'Week',
@@ -119,12 +134,13 @@ export default function Subscription({
       </IconButton>
       <Dialog
         open={open}
+        fullScreen={matchesXS}
         onClose={() => setOpen(false)}
         fullWidth
         maxWidth='md'
         classes={{ paper: classes.dialog }}
       >
-        <Grid container direction='column'>
+        <Grid container direction='column' alignItems='center'>
           <Grid
             item
             container
@@ -149,9 +165,10 @@ export default function Subscription({
           <Grid
             item
             container
+            direction={matchesXS ? 'column' : 'row'}
             justifyContent='space-between'
             classes={{ root: clsx(classes.row, classes.light) }}
-            alignItems='center'
+            alignItems={matchesXS ? 'flex-start' : 'center'}
           >
             <Grid item>
               <Typography variant='h4'>Deliver Every</Typography>
@@ -198,6 +215,13 @@ export default function Subscription({
               </Typography>
             </Button>
           </Grid>
+          {matchesXS && (
+            <Grid item>
+              <Button onClick={() => setOpen(false)}>
+                <Typography variant='body2'>Cancel</Typography>
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Dialog>
     </>
