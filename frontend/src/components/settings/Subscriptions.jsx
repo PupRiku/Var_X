@@ -5,12 +5,19 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import SettingsGrid from './SettingsGrid';
+
 import { UserContext, FeedbackContext } from '../../contexts';
 import { setSnackbar } from '../../contexts/actions';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(theme => ({
+  item: {
+    height: '100%',
+    width: '100%',
+  },
+}));
 
-export default function Subscriptions() {
+export default function Subscriptions({ setSelectedSetting }) {
   const classes = useStyles();
   const { user } = useContext(UserContext);
   const { dispatchFeedback } = useContext(FeedbackContext);
@@ -34,7 +41,29 @@ export default function Subscriptions() {
       });
   }, []);
 
-  console.log(subscriptions);
+  const columns = [
+    { field: 'details', headerName: 'Details', width: 250, sortable: false },
+    { field: 'item', headerName: 'Item', width: 250, sortable: false },
+    { field: 'quantity', headerName: 'Quantity', width: 250, sortable: false },
+    {
+      field: 'frequency',
+      headerName: 'Frequency',
+      width: 250,
+      sortable: false,
+    },
+    { field: 'next order', headerName: 'Next Order', width: 250 },
+    { field: 'total', headerName: 'Total', width: 250 },
+    { field: '', width: 250, sortable: false },
+  ];
 
-  return null;
+  return (
+    <Grid item container classes={{ root: classes.item }}>
+      <SettingsGrid
+        rows={[]}
+        columns={columns}
+        rowsPerPage={3}
+        setSelectedSetting={setSelectedSetting}
+      />
+    </Grid>
+  );
 }
