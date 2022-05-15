@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Layout from '../components/ui/layout';
@@ -24,6 +25,10 @@ const useStyles = makeStyles(theme => ({
 export default function Cart() {
   const classes = useStyles();
   const { user } = useContext(UserContext);
+  const matchesMD = useMediaQuery(theme => theme.breakpoints.down('md'));
+
+  const items = <CartItems />;
+  const checkout = <CheckoutPortal user={user} />;
 
   return (
     <Layout>
@@ -43,8 +48,8 @@ export default function Cart() {
           </Typography>
         </Grid>
         <Grid item container>
-          <CartItems />
-          <CheckoutPortal user={user} />
+          {matchesMD ? checkout : items}
+          {matchesMD ? items : checkout}
         </Grid>
       </Grid>
     </Layout>
