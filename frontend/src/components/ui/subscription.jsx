@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import QtyButton from '../product-list/QtyButton';
 
-import { CartContext, FeedbackContext } from '../../contexts';
+import { CartContext, FeedbackContext, UserContext } from '../../contexts';
 import { setSnackbar, addToCart } from '../../contexts/actions';
 
 import SubscriptionIcon from '../../images/Subscription';
@@ -102,6 +102,7 @@ export default function Subscription({
   const [frequency, setFrequency] = useState('Month');
   const { dispatchFeedback } = useContext(FeedbackContext);
   const { dispatchCart } = useContext(CartContext);
+  const { user } = useContext(UserContext);
   const matchesXS = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
   const frequencies = [
@@ -125,12 +126,23 @@ export default function Subscription({
     );
   };
 
+  const handleOpen = () => {
+    if (user.username === 'Guest') {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'You must be logged in to create a subscription.',
+        })
+      );
+      return;
+    } else {
+      setOpen(true);
+    }
+  };
+
   return (
     <>
-      <IconButton
-        onClick={() => setOpen(true)}
-        classes={{ root: classes.iconButton }}
-      >
+      <IconButton onClick={handleOpen} classes={{ root: classes.iconButton }}>
         <span className={classes.iconWrapper}>
           <SubscriptionIcon />
         </span>
@@ -212,6 +224,7 @@ export default function Subscription({
               onClick={handleCart}
               color='secondary'
               classes={{ root: classes.cartButton }}
+              disabled={qty === 0}
             >
               <Typography variant='h1' classes={{ root: classes.cartText }}>
                 Add Subscription To Cart
