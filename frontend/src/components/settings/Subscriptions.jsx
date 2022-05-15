@@ -10,12 +10,7 @@ import SettingsGrid from './SettingsGrid';
 import { UserContext, FeedbackContext } from '../../contexts';
 import { setSnackbar } from '../../contexts/actions';
 
-const useStyles = makeStyles(theme => ({
-  item: {
-    height: '100%',
-    width: '100%',
-  },
-}));
+const useStyles = makeStyles(theme => ({}));
 
 export default function Subscriptions({ setSelectedSetting }) {
   const classes = useStyles();
@@ -41,6 +36,37 @@ export default function Subscriptions({ setSelectedSetting }) {
       });
   }, []);
 
+  const createData = data =>
+    data.map(
+      ({
+        shippingInfo,
+        shippingAddress,
+        billingInfo,
+        billingAddress,
+        paymentMethod,
+        name,
+        variant,
+        quantity,
+        frequency,
+        next_delivery,
+        id,
+      }) => ({
+        details: {
+          shippingInfo,
+          shippingAddress,
+          billingInfo,
+          billingAddress,
+          paymentMethod,
+        },
+        item: { name, variant },
+        quantity: { quantity, variant, name },
+        frequency,
+        next_delivery,
+        total: variant.price * 1.055,
+        id,
+      })
+    );
+
   const columns = [
     { field: 'details', headerName: 'Details', width: 250, sortable: false },
     { field: 'item', headerName: 'Item', width: 250, sortable: false },
@@ -51,19 +77,21 @@ export default function Subscriptions({ setSelectedSetting }) {
       width: 250,
       sortable: false,
     },
-    { field: 'next order', headerName: 'Next Order', width: 250 },
+    { field: 'next_delivery', headerName: 'Next Deliver', width: 250 },
     { field: 'total', headerName: 'Total', width: 250 },
     { field: '', width: 250, sortable: false },
   ];
 
+  const rows = createData(subscriptions);
+
+  console.log(rows);
+
   return (
-    <Grid item container classes={{ root: classes.item }}>
-      <SettingsGrid
-        rows={[]}
-        columns={columns}
-        rowsPerPage={3}
-        setSelectedSetting={setSelectedSetting}
-      />
-    </Grid>
+    <SettingsGrid
+      rows={[]}
+      columns={columns}
+      rowsPerPage={3}
+      setSelectedSetting={setSelectedSetting}
+    />
   );
 }
