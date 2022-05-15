@@ -12,6 +12,8 @@ import clsx from 'clsx';
 import Settings from './Settings';
 import OrderHistory from './OrderHistory';
 import Favorites from './Favorites';
+import Subscriptions from './Subscriptions';
+
 import { UserContext } from '../../contexts';
 import { setUser } from '../../contexts/actions';
 
@@ -99,7 +101,11 @@ export default function SettingsPortal() {
     { label: 'Settings', icon: settingsIcon, component: Settings, large: true },
     { label: 'Order History', icon: orderHistoryIcon, component: OrderHistory },
     { label: 'Favorites', icon: favoritesIcon, component: Favorites },
-    { label: 'Subscriptions', icon: subscriptionIcon },
+    {
+      label: 'Subscriptions',
+      icon: subscriptionIcon,
+      component: Subscriptions,
+    },
   ];
 
   const handleClick = setting => {
