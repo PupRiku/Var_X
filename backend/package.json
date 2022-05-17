@@ -14,9 +14,6 @@
     "babel-eslint": "^10.1.0"
   },
   "dependencies": {
-    "-": "0.0.1",
-    "g": "^2.0.1",
-    "pm2": "^5.2.0",
     "prettier": "^2.5.1",
     "strapi": "3.1.4",
     "strapi-admin": "3.1.4",
@@ -28,7 +25,6 @@
     "strapi-plugin-upload": "3.1.4",
     "strapi-plugin-users-permissions": "3.1.4",
     "strapi-provider-email-sendgrid": "^3.4.0",
-    "strapi-provider-upload-aws-s3": "^3.6.2",
     "strapi-utils": "^3.1.4",
     "stripe": "^8.135.0"
   },

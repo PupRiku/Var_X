@@ -25,7 +25,7 @@ module.exports = {
     {
       resolve: `gatsby-source-strapi`,
       options: {
-        apiURL: process.env.GATSBY_STRAPI_URL,
+        apiURL: `http://localhost:1337`,
         queryLimit: 1000, // Defaults to 100
         collectionTypes: [`product`, `category`, `variant`],
       },
